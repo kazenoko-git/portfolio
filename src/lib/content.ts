@@ -2,10 +2,10 @@ import { getCollection } from 'astro:content';
 import { cityCatalog } from './catalog';
 export async function featuredContent() {
   const entries = [
-    ...(await getCollection('projects')),
+    ...(await getCollection('projects', ({ data }) => !data.draft)),
     ...(await getCollection('writing', ({ data }) => !data.draft)),
-    ...(await getCollection('papers')),
-    ...(await getCollection('certifications')),
+    ...(await getCollection('papers', ({ data }) => !data.draft)),
+    ...(await getCollection('certifications', ({ data }) => !data.draft)),
   ];
   return entries
     .filter((e) => e.data.featured)
@@ -13,10 +13,10 @@ export async function featuredContent() {
 }
 export async function frontpageContent() {
   const entries = [
-    ...(await getCollection('projects')),
+    ...(await getCollection('projects', ({ data }) => !data.draft)),
     ...(await getCollection('writing', ({ data }) => !data.draft)),
-    ...(await getCollection('papers')),
-    ...(await getCollection('certifications')),
+    ...(await getCollection('papers', ({ data }) => !data.draft)),
+    ...(await getCollection('certifications', ({ data }) => !data.draft)),
   ];
   return cityCatalog(entries);
 }

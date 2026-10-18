@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { formatDate, readingTime } from '../../lib/content';
+import { site } from '../../lib/site';
 export async function getStaticPaths() {
   const collections = [
     'writing',
@@ -22,9 +23,49 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content, headings } = await render(entry);
 const draft = 'draft' in entry.data && entry.data.draft;
+const repoUrl = 'repoUrl' in entry.data ? entry.data.repoUrl : undefined;
+const structuredData = {
+  '@type':
+    entry.collection === 'papers'
+      ? 'ScholarlyArticle'
+      : entry.collection === 'writing'
+        ? 'BlogPosting'
+        : entry.collection === 'projects'
+          ? 'CreativeWork'
+          : 'CreativeWork',
+  name: entry.data.title,
+  headline: entry.data.title,
+  description: entry.data.summary,
+  url: new URL(Astro.url.pathname, Astro.site).href,
+  datePublished: entry.data.date.toISOString(),
+  author:
+    'authors' in entry.data
+      ? entry.data.authors.map((name) => ({ '@type': 'Person', name }))
+      : { '@type': 'Person', name: site.author },
+  ...(repoUrl
+    ? {
+        subjectOf: {
+          '@type': 'SoftwareSourceCode',
+          name: entry.data.title,
+          codeRepository: repoUrl,
+        },
+      }
+    : {}),
+  ...('issuer' in entry.data
+    ? {
+        provider: { '@type': 'Organization', name: entry.data.issuer },
+      }
+    : {}),
+};
 ---
 
-<Base title={entry.data.title} description={entry.data.summary} noindex={draft}>
+<Base
+  title={entry.data.title}
+  description={entry.data.summary}
+  noindex={draft}
+  structuredData={structuredData}
+  article
+>
   <div class="wrap article-top">
     <a href={`/${entry.collection}`} class="mono back-link">
       ← ALL {entry.collection.toUpperCase()}
@@ -40,6 +81,7 @@ const draft = 'draft' in entry.data && entry.data.draft;
       </time>
       <span>{readingTime(entry.body)} MIN READ</span>
       <span>{entry.data.status}</span>
+      {repoUrl && <a href={repoUrl}>Project repository ↗</a>}
     </div>
     {draft && (
       <div class="draft-notice">

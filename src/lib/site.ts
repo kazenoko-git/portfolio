@@ -1,11 +1,17 @@
 export const site = {
   name: 'kazenoko',
   kanji: '風の子',
-  domain: 'kazenoko.me',
+  domain: 'kazenoko.pages.dev',
+  url: 'https://kazenoko.pages.dev',
+  author: 'Ivan Samuel',
+  repository: 'https://github.com/kazenoko-git/portfolio',
   description:
-    'A personal digital laboratory. Notes and experiments in silicon, software, and systems.',
+    'Projects, papers, and notes by Ivan Samuel (kazenoko), exploring silicon, software, and machine learning.',
   email: null as string | null,
-  socials: [] as { label: string; url: string }[],
+  socials: [
+    { label: 'GitHub', url: 'https://github.com/kazenoko-git' },
+    { label: 'LinkedIn', url: 'https://www.linkedin.com/in/kazenoko/' },
+  ] as { label: string; url: string }[],
 };
 export const navigation = [
   ['Blogs', '/writing'],

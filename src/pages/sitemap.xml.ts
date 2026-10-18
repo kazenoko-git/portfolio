@@ -4,9 +4,9 @@ export async function GET({ site }: APIContext) {
   const entries = (
     await Promise.all([
       getCollection('writing', ({ data }) => !data.draft),
-      getCollection('projects'),
-      getCollection('papers'),
-      getCollection('certifications'),
+      getCollection('projects', ({ data }) => !data.draft),
+      getCollection('papers', ({ data }) => !data.draft),
+      getCollection('certifications', ({ data }) => !data.draft),
     ])
   ).flat();
   const paths = [

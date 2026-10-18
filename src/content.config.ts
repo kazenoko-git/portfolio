@@ -7,6 +7,7 @@ const common = z.object({
   date: z.coerce.date(),
   tags: z.array(z.string()).default([]),
   status: z.string().default('In progress'),
+  draft: z.boolean().default(false),
   featured: z.boolean().default(false),
   city: z.boolean().default(true),
   featuredOrder: z.number().default(100),
@@ -14,7 +15,12 @@ const common = z.object({
   links: z.array(z.object({ label: z.string(), url: z.url() })).default([]),
 });
 const writing = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/writing' }),
+  loader: glob({
+    pattern: ['writing/**/*.{md,mdx}', 'blogs/**/*.{md,mdx}'],
+    base: './src/content',
+    generateId: ({ entry }) =>
+      entry.replace(/^(writing|blogs)\//, '').replace(/\.(md|mdx)$/, ''),
+  }),
   schema: common.extend({
     draft: z.boolean().default(true),
     updatedAt: z.coerce.date().optional(),
@@ -26,6 +32,7 @@ const projects = defineCollection({
   schema: common.extend({
     technologies: z.array(z.string()).default([]),
     category: z.string(),
+    repoUrl: z.url().optional(),
   }),
 });
 const papers = defineCollection({
@@ -39,8 +46,12 @@ const papers = defineCollection({
 });
 const certifications = defineCollection({
   loader: glob({
-    pattern: '**/*.{md,mdx}',
-    base: './src/content/certifications',
+    pattern: ['certifications/**/*.{md,mdx}', 'certificates/**/*.{md,mdx}'],
+    base: './src/content',
+    generateId: ({ entry }) =>
+      entry
+        .replace(/^(certifications|certificates)\//, '')
+        .replace(/\.(md|mdx)$/, ''),
   }),
   schema: common.extend({
     issuer: z.string(),

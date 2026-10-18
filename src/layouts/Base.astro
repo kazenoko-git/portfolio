@@ -10,15 +10,43 @@ interface Props {
   description?: string;
   noindex?: boolean;
   cinematic?: boolean;
+  structuredData?: Record<string, unknown>;
+  article?: boolean;
 }
 const {
   title,
   description = site.description,
   noindex = false,
   cinematic = false,
+  structuredData,
+  article = false,
 } = Astro.props;
-const pageTitle = title ? `${title} — kazenoko` : 'kazenoko';
+const pageTitle = title
+  ? `${title} — kazenoko`
+  : 'Ivan Samuel (kazenoko) — Silicon, Software & Research';
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const personId = new URL('/#person', Astro.site).href;
+const linkedData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': personId,
+      name: site.author,
+      alternateName: site.name,
+      url: new URL('/#profile', Astro.site).href,
+      sameAs: site.socials.map((link) => link.url),
+    },
+    {
+      '@type': 'WebSite',
+      '@id': new URL('/#website', Astro.site).href,
+      name: site.name,
+      url: Astro.site?.href,
+      author: { '@id': personId },
+    },
+    ...(!noindex && structuredData ? [structuredData] : []),
+  ],
+};
 ---
 
 <!doctype html>
@@ -32,8 +60,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <meta property="og:title" content={pageTitle} />
+    <meta property="og:site_name" content="kazenoko" />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta name="author" content={site.author} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(linkedData).replaceAll('<', '\\u003c')}
+    />
     <meta property="og:url" content={canonical} />
     <meta
       property="og:image"
@@ -75,6 +109,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       </a>
       <a href="/">Home</a>
       <div class="footer-links">
+        <a href={site.repository}>Source on GitHub ↗</a>
         <a href="/rss.xml">RSS ↗</a>
         <a href="/contact">Contact ↗</a>
         <span class="mono">© {new Date().getFullYear()}</span>

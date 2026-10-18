@@ -1,6 +1,11 @@
-# kazenoko.me
+# kazenoko
 
 Personal website and digital laboratory, built with Astro, TypeScript, and MDX. Static output for Cloudflare Pages; no server adapter or runtime database is required.
+
+Live: <https://kazenoko.pages.dev>. See [Publishing Markdown](docs/publishing.md)
+for the GitHub-to-Pages publishing flow and frontmatter examples. Content under
+`src/content/` is rendered automatically; working documents under `docs/` are
+not published as website entries.
 
 ## Development
 
@@ -48,7 +53,7 @@ Write the article here.
 
 The filename determines `/writing/my-slug/`. Heading anchors, a table of contents, reading time, syntax highlighting, and code copy buttons are automatic. Use fenced `verilog` or `system-verilog` blocks, Markdown tables, and `<figure>` / `<figcaption>` for illustrations. Use descriptive `alt` text and store media in `public/images/`. `cover` is an optional image path. `links` takes `{ label, url }` objects.
 
-**Writing defaults to `draft: true`.** Drafts are visible as clearly labeled outlines but excluded from RSS, sitemap, and search indexing. Draft URLs are public, so never put confidential material in them. Set `draft: false` and update `status` only after reviewing the article. Dates must reflect the actual publication date when publishing. The initial ASIC report is an editorial outline, not a verified technical report.
+**Writing defaults to `draft: true`.** All collections support draft entries. Drafts are visible as clearly labeled outlines but excluded from published search results, homepage listings, RSS, and sitemap. Draft URLs are public and marked noindex. Set `draft: false` and update `status` when ready. Dates must reflect the actual publication date when publishing an article. The initial ASIC report is an editorial outline, not a verified technical report. `src/content/blogs/` aliases writing; `src/content/certificates/` aliases certifications.
 
 Projects use the common fields plus `category` and `technologies`. Papers require `authors`, `abstract`, and `publicationStatus`; optional `pdfUrl`. Certifications require `issuer`; optional `credentialUrl`. Empty collections intentionally render honest empty states. Do not add invented entries to fill them.
 
@@ -115,7 +120,7 @@ wrangler pages deploy dist --project-name YOUR_CONFIRMED_PROJECT_NAME
 
 The compatibility date is pinned to `2026-07-21`, the newest supported by the installed Wrangler 4.112.0 local runtime. Advance it after updating Wrangler and rechecking preview.
 
-`wrangler.jsonc` uses `kazenoko` as the proposed project name; change it to the actual Pages project name before deployment if different. No account identifier or credentials are committed. Authentication and project creation must be completed in the intended Cloudflare account. No deployment is performed by a build or test command. Connect `kazenoko.me` through the Pages project's custom-domain settings after deployment. Update `site` in `astro.config.mjs` and `public/robots.txt` if the canonical domain changes.
+`wrangler.jsonc` targets the existing `kazenoko` project. The current Pages project retains its older `Website` Git binding; its configured build retrieves `portfolio/main` and publishes `portfolio-source/dist`. The GitHub workflow triggers that build after checks using a secret deploy hook. See [the publishing guide](docs/publishing.md) for the actual production settings. A local build or test alone does not deploy. If a custom domain is connected later, update `site.url` and `site.domain` in `src/lib/site.ts`; canonical URLs, RSS, sitemap and robots output follow that configuration.
 
 `404.html` enables a proper missing-page response rather than SPA fallback. `_headers` sets basic browser response policies and immutable caching for hashed assets. Fonts are hosted locally; the site includes no analytics.
 
@@ -123,7 +128,7 @@ The compatibility date is pinned to `2026-07-21`, the newest supported by the in
 
 The cinematic homepage, automated content/billboard mapping, and publication templates are implemented. Contact links and project cover artwork are awaiting confirmed material; the portrait uses the supplied face artwork. The ASIC report remains an editorial draft outline until verified design content is supplied.
 
-Typechecking, lint, static builds, generated-link checks, draft exclusion, content inclusion, seeded billboard allocation, curved projection, and side-wall cover mapping have automated checks. Chrome's native UI is available for desktop visual review; the browser extension interface times out in this environment. Mobile, screen reader, and detailed performance review remain outstanding. Empty papers and certifications collections intentionally produce Astro warnings.
+Typechecking, lint, static builds, generated-link checks, draft exclusion, content inclusion, publishing metadata, seeded billboard allocation, curved projection, and side-wall cover mapping have automated checks. Mobile, screen reader, and detailed performance review remain outstanding. The empty papers collection intentionally produces Astro warnings. Prodo, Klima, and their awards are the first plain Markdown entries; the other researched projects and manuscripts remain separate working material until added to the content folders.
 
 The local Node 26.0 runs the checks, but the lint dependencies officially require Node 24.16+ or 26.3+; use the supported Node 24 line for Cloudflare builds.
 
