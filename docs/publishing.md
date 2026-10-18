@@ -84,8 +84,8 @@ Cloudflare Pages production settings:
 - Build command: shallow-clone `portfolio/main` into `portfolio-source`, enter
   it, run `npm ci`, then `npm run build`.
 - Output folder: `portfolio-source/dist`.
-- Node: the supported Node 24 line (`.node-version`).
-- Pages build variables: `NODE_VERSION=24`, `SKIP_DEPENDENCY_INSTALL=1` (skip
+- Node: Node 24.16.0 (`.node-version`).
+- Pages build variables: `NODE_VERSION=24.16.0`, `SKIP_DEPENDENCY_INSTALL=1` (skip
   installing the legacy repository; the explicit build installs portfolio).
 
 The GitHub check workflow validates content, typechecks, lints, builds, and checks
