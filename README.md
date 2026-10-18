@@ -3,8 +3,8 @@
 Personal website and digital laboratory, built with Astro, TypeScript, and MDX. Static output for Cloudflare Pages; no server adapter or runtime database is required.
 
 Live: <https://kazenoko.pages.dev>. See [Publishing Markdown](docs/publishing.md)
-for the GitHub-to-Pages publishing flow and frontmatter examples. Content under
-`src/content/` is rendered automatically; working documents under `docs/` are
+for the GitHub-to-Pages publishing flow and frontmatter examples. Public repository READMEs and publication folders are imported automatically.
+Extra content and overrides live under root `content/`; working documents under `docs/` are
 not published as website entries.
 
 ## Development
@@ -20,7 +20,7 @@ npm run dev
 
 ## Structure
 
-- `src/content/` — typed MDX collections: writing, projects, papers, certifications.
+- `content/` — typed MDX collections: writing, projects, papers, certifications.
 - `src/content.config.ts` — frontmatter schemas.
 - `src/lib/site.ts` — identity, email, social links, navigation.
 - `src/layouts/Base.astro` — shared document, SEO, navigation, footer.
@@ -32,7 +32,7 @@ npm run dev
 
 ## Adding content
 
-Add `src/content/writing/my-slug.mdx`:
+Add `content/writing/my-slug.mdx`:
 
 ```mdx
 ---
@@ -53,7 +53,7 @@ Write the article here.
 
 The filename determines `/writing/my-slug/`. Heading anchors, a table of contents, reading time, syntax highlighting, and code copy buttons are automatic. Use fenced `verilog` or `system-verilog` blocks, Markdown tables, and `<figure>` / `<figcaption>` for illustrations. Use descriptive `alt` text and store media in `public/images/`. `cover` is an optional image path. `links` takes `{ label, url }` objects.
 
-**Writing defaults to `draft: true`.** All collections support draft entries. Drafts are visible as clearly labeled outlines but excluded from published search results, homepage listings, RSS, and sitemap. Draft URLs are public and marked noindex. Set `draft: false` and update `status` when ready. Dates must reflect the actual publication date when publishing an article. The initial ASIC report is an editorial outline, not a verified technical report. `src/content/blogs/` aliases writing; `src/content/certificates/` aliases certifications.
+**Writing defaults to `draft: true`.** All collections support draft entries. Drafts are visible as clearly labeled outlines but excluded from published search results, homepage listings, RSS, and sitemap. Draft URLs are public and marked noindex. Set `draft: false` and update `status` when ready. Dates must reflect the actual publication date when publishing an article. The initial ASIC report is an editorial outline, not a verified technical report. `content/blogs/` aliases writing; `content/certificates/` aliases certifications.
 
 Projects use the common fields plus `category` and `technologies`. Papers require `authors`, `abstract`, and `publicationStatus`; optional `pdfUrl`. Certifications require `issuer`; optional `credentialUrl`. Empty collections intentionally render honest empty states. Do not add invented entries to fill them.
 
@@ -63,7 +63,7 @@ Replace `public/images/portrait.png` with a light-on-transparent or light-on-dar
 
 ## Automatic homepage and billboards
 
-Add an MDX file to `src/content/projects/`, `papers/`, `certifications/`, or `writing/`. Its title, summary, cover, and URL power both the ordinary pages and the homepage. No separate billboard registry or `featured: true` flag is required. Changes appear after a rebuild/deploy (or automatically in local development).
+Add an MDX file to `content/projects/`, `papers/`, `certifications/`, or `writing/`. Its title, summary, cover, and URL power both the ordinary pages and the homepage. No separate billboard registry or `featured: true` flag is required. Changes appear after a rebuild/deploy (or automatically in local development).
 
 For a project:
 
@@ -128,7 +128,7 @@ The compatibility date is pinned to `2026-07-21`, the newest supported by the in
 
 The cinematic homepage, automated content/billboard mapping, and publication templates are implemented. Contact links and project cover artwork are awaiting confirmed material; the portrait uses the supplied face artwork. The ASIC report remains an editorial draft outline until verified design content is supplied.
 
-Typechecking, lint, static builds, generated-link checks, draft exclusion, content inclusion, publishing metadata, seeded billboard allocation, curved projection, and side-wall cover mapping have automated checks. Mobile, screen reader, and detailed performance review remain outstanding. The empty papers collection intentionally produces Astro warnings. Prodo, Klima, and their awards are the first plain Markdown entries; the other researched projects and manuscripts remain separate working material until added to the content folders.
+Typechecking, lint, static builds, generated-link checks, draft exclusion, content inclusion, publishing metadata, seeded billboard allocation, curved projection, and side-wall cover mapping have automated checks. Mobile, screen reader, and detailed performance review remain outstanding. Public repository documentation and the two existing Telos preliminary papers are imported at build time. Prodo, Klima, and their awards have curated entries in root `content/`. Working manuscript drafts remain local. Remote changes refresh through the six-hour workflow or a manual workflow run.
 
 The local Node 26.0 runs the checks, but the lint dependencies officially require Node 24.16+ or 26.3+; use the supported Node 24 line for Cloudflare builds.
 

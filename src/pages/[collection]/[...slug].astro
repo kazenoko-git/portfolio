@@ -37,7 +37,9 @@ const structuredData = {
   headline: entry.data.title,
   description: entry.data.summary,
   url: new URL(Astro.url.pathname, Astro.site).href,
-  datePublished: entry.data.date.toISOString(),
+  ...(entry.data.source && entry.data.dateLabel !== 'Published'
+    ? { dateModified: entry.data.source.updatedAt.toISOString() }
+    : { datePublished: entry.data.date.toISOString() }),
   author:
     'authors' in entry.data
       ? entry.data.authors.map((name) => ({ '@type': 'Person', name }))
@@ -76,6 +78,7 @@ const structuredData = {
     <h1>{entry.data.title}</h1>
     <p>{entry.data.summary}</p>
     <div class="article-meta mono">
+      <span>{entry.data.dateLabel}</span>
       <time datetime={entry.data.date.toISOString()}>
         {formatDate(entry.data.date)}
       </time>
@@ -108,7 +111,28 @@ const structuredData = {
       </a>
     </aside>
     <article class="prose">
+      {entry.data.source && (
+        <p class="source-notice">
+          Imported repository documentation. Claims and project status reflect
+          the source.{' '}
+          <a href={entry.data.source.url}>Read the source on GitHub ↗</a>
+        </p>
+      )}
       <Content />
+      {entry.data.repositoryDocumentation && (
+        <section>
+          <h2>Repository documentation</h2>
+          <p>
+            Automatically imported from{' '}
+            <a href={entry.data.repositoryDocumentation.url}>
+              {entry.data.repositoryDocumentation.repo} ↗
+            </a>
+            . This documentation may differ from the project summary above; its
+            claims and status reflect the source.
+          </p>
+          <div set:html={entry.data.repositoryDocumentation.html} />
+        </section>
+      )}
       {entry.data.links.length > 0 && (
         <section>
           <h2>Links & sources</h2>

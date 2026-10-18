@@ -1,0 +1,49 @@
+{
+  "accounts": ["kazenoko-git"],
+  "include": ["fourtysevencode/prodo"],
+  "exclude": [
+    "kazenoko-git/portfolio",
+    "kazenoko-git/Website",
+    "kazenoko-git/Resonance",
+    "kazenoko-git/Eternae"
+  ],
+  "overrides": {
+    "kazenoko-git/sensitiveDataFinder": {
+      "slug": "sdfr",
+      "title": "SDFr — Sensitive Data Finder"
+    },
+    "kazenoko-git/cyber-monopoly": {
+      "slug": "deploy-or-die",
+      "title": "Deploy or Die"
+    },
+    "kazenoko-git/Eternae-aurora": {
+      "slug": "eternae",
+      "title": "Eternae / Aurora Engine"
+    },
+    "kazenoko-git/Radiant": {
+      "summary": "Satellite-imagery analysis for checking solar-panel installation claims, including panel counts and area estimates."
+    },
+    "kazenoko-git/Talos": {
+      "slug": "neuromorphic-npu",
+      "ref": "talos_2"
+    }
+  },
+  "documents": [
+    {
+      "repo": "kazenoko-git/telos",
+      "path": "research/paper_1_token_budget_scaling.md",
+      "collection": "papers",
+      "slug": "telos-preliminary-1",
+      "authors": ["Ivan Samuel"],
+      "publicationStatus": "Preliminary report"
+    },
+    {
+      "repo": "kazenoko-git/telos",
+      "path": "research/paper_2_capability_divergence_and_rope.md",
+      "collection": "papers",
+      "slug": "telos-preliminary-2",
+      "authors": ["Ivan Samuel"],
+      "publicationStatus": "Preliminary report"
+    }
+  ]
+}

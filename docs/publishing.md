@@ -1,9 +1,20 @@
 # Publish Markdown from GitHub
 
-The portfolio repository is the content source. Add a Markdown file, commit it,
-and push to `main`. GitHub validates the site and triggers a Cloudflare Pages
-build. Pages retrieves `portfolio/main`, builds it, and publishes generated HTML
-to <https://kazenoko.pages.dev>.
+The site discovers public, original repositories owned by `kazenoko-git` and
+imports their READMEs as project documentation. It also imports Markdown in
+their publishing folders and the two existing Telos preliminary papers.
+`fourtysevencode/prodo` is included explicitly as a team project.
+
+For extra entries or curated summaries, add Markdown to **`content/` at the root
+of the portfolio repository**, commit, and push to `main`. GitHub validates the
+site and triggers a Cloudflare Pages build. Pages retrieves `portfolio/main`,
+builds it, and publishes generated HTML to <https://kazenoko.pages.dev>.
+
+The workflow also checks and rebuilds every six hours (at minute 17 UTC), picking
+up changes and new repositories on your account. GitHub may delay scheduled runs.
+Use **Actions → Check and publish website → Run workflow** for an immediate
+refresh. Local development imports repository content when its server starts;
+restart it to refresh remote sources.
 
 This is build-time publishing. The browser does not fetch GitHub on every visit.
 It keeps pages readable without JavaScript and avoids depending on a GitHub API
@@ -11,21 +22,55 @@ request for every reader.
 
 ## Folder routing
 
-| Put `.md` or `.mdx` here                                     | Appears under       |
-| ------------------------------------------------------------ | ------------------- |
-| `src/content/projects/`                                      | `/projects/`        |
-| `src/content/blogs/` or `src/content/writing/`               | `/writing/` (Blogs) |
-| `src/content/papers/`                                        | `/papers/`          |
-| `src/content/certifications/` or `src/content/certificates/` | `/certifications/`  |
+| Put `.md` or `.mdx` here                             | Appears under       |
+| ---------------------------------------------------- | ------------------- |
+| `content/projects/`                                  | `/projects/`        |
+| `content/blogs/` or `content/writing/`               | `/writing/` (Blogs) |
+| `content/papers/`                                    | `/papers/`          |
+| `content/certifications/` or `content/certificates/` | `/certifications/`  |
 
 The filename supplies the URL. A file named `projects/solar-audit.md` becomes
 `/projects/solar-audit/`. Nested folders are preserved. Do not use the same path
 in both aliases of a collection. For example, choose either `blogs/update.md`
 or `writing/update.md`, not both.
 
-Only these content folders are published. Working documents under `docs/`,
-scripts, repository READMEs, evidence folders, and manuscript drafts are not
-automatically turned into public pages.
+### Imported repositories
+
+- The root `README.md` (case insensitive) supplies `/projects/REPO-SLUG/`.
+  Repositories without a README get a repository metadata entry; empty Git
+  repositories without a readable branch are skipped.
+- Other repositories' `.md` files in publishing folders (`content/projects/`,
+  `content/papers/`, `content/blogs/`, `content/writing/`,
+  `content/certifications/`, `content/certificates/`) go into the corresponding
+  collection. Those same folders at the repository root are also recognized.
+  Directory READMEs are not separate articles. Remote MDX is not executed.
+- Document URLs are namespaced by repository: `telos/blogs/update.md` becomes
+  `/writing/telos/update/`. Project slugs and exceptional document paths are
+  configured in `config/repositories.json`.
+- Repository metadata supplies missing titles, descriptions, and dates. Dates
+  without explicit frontmatter are labeled repository-created/updated dates,
+  not claimed publication dates. Papers retain their source's preliminary status.
+- A local entry with the same collection and slug takes priority. A local project
+  with the same `repoUrl` also matches. Its text and metadata stay primary, with
+  the imported README below under **Repository documentation**. This preserves
+  the Prodo and Klima summaries and awards. Local-only entries also work.
+- READMEs are documentation, not independently verified claims. Source links are
+  visible. Relative document links point to imported pages when available;
+  remaining links and images resolve against GitHub. Imported HTML is sanitized.
+- Private repositories, forks, disabled repositories, Resonance, the portfolio,
+  and the old Website repository are excluded. The later Godot Eternae repository
+  is excluded in favor of Eternae-aurora. Talos reads its `talos_2` branch.
+- Arbitrary `docs/` and `research/` files, operational instructions, and working
+  manuscripts are not swept into the site. The two published Telos paper paths
+  are explicit exceptions. Add further publication-ready material to `content/`.
+
+The importer uses public GitHub endpoints, optionally authenticated with
+`GITHUB_TOKEN` for rate limits. It checks visibility even when authenticated.
+GitHub Actions uses its built-in token; Cloudflare needs no GitHub secret for
+public sources. API errors fail the rebuild and leave the previous deployment
+live, rather than silently publishing an incomplete inventory. Removed sources
+are removed at the next successful rebuild. A source made private is no longer
+imported, though previous public deployments can still exist in Pages history.
 
 ## Project example
 

@@ -1,10 +1,20 @@
 import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
-import { glob } from 'astro/loaders';
+import { repositoryContent } from './lib/repository-loader';
+const source = z.object({
+  repo: z.string(),
+  path: z.string(),
+  revision: z.string(),
+  url: z.url(),
+  updatedAt: z.coerce.date(),
+});
 const common = z.object({
   title: z.string(),
   summary: z.string(),
   date: z.coerce.date(),
+  dateLabel: z.string().default('Published'),
+  source: source.optional(),
+  repositoryDocumentation: source.extend({ html: z.string() }).optional(),
   tags: z.array(z.string()).default([]),
   status: z.string().default('In progress'),
   draft: z.boolean().default(false),
@@ -15,12 +25,7 @@ const common = z.object({
   links: z.array(z.object({ label: z.string(), url: z.url() })).default([]),
 });
 const writing = defineCollection({
-  loader: glob({
-    pattern: ['writing/**/*.{md,mdx}', 'blogs/**/*.{md,mdx}'],
-    base: './src/content',
-    generateId: ({ entry }) =>
-      entry.replace(/^(writing|blogs)\//, '').replace(/\.(md|mdx)$/, ''),
-  }),
+  loader: repositoryContent('writing'),
   schema: common.extend({
     draft: z.boolean().default(true),
     updatedAt: z.coerce.date().optional(),
@@ -28,7 +33,7 @@ const writing = defineCollection({
   }),
 });
 const projects = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
+  loader: repositoryContent('projects'),
   schema: common.extend({
     technologies: z.array(z.string()).default([]),
     category: z.string(),
@@ -36,7 +41,7 @@ const projects = defineCollection({
   }),
 });
 const papers = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/papers' }),
+  loader: repositoryContent('papers'),
   schema: common.extend({
     authors: z.array(z.string()),
     abstract: z.string(),
@@ -45,14 +50,7 @@ const papers = defineCollection({
   }),
 });
 const certifications = defineCollection({
-  loader: glob({
-    pattern: ['certifications/**/*.{md,mdx}', 'certificates/**/*.{md,mdx}'],
-    base: './src/content',
-    generateId: ({ entry }) =>
-      entry
-        .replace(/^(certifications|certificates)\//, '')
-        .replace(/\.(md|mdx)$/, ''),
-  }),
+  loader: repositoryContent('certifications'),
   schema: common.extend({
     issuer: z.string(),
     credentialUrl: z.url().optional(),

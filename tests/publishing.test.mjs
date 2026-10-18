@@ -68,3 +68,31 @@ test('draft articles do not emit publishable article structured data', async () 
   const data = JSON.parse(match[1]);
   assert.ok(!data['@graph'].some((item) => item['@type'] === 'BlogPosting'));
 });
+
+test('repository content is published alongside curated local content without duplicate project pages', async () => {
+  const prodo = await page('projects/prodo');
+  assert.ok(
+    prodo.includes('## Recognition') || prodo.includes('id="recognition"'),
+  );
+  assert.ok(prodo.includes('Repository documentation'));
+  assert.ok(prodo.includes('fourtysevencode/prodo/blob/'));
+  const atom = await page('projects/atomqm');
+  assert.ok(atom.includes('Imported repository documentation'));
+  assert.ok(atom.includes('kazenoko-git/AtomQM/blob/'));
+  for (const name of ['telos-preliminary-1', 'telos-preliminary-2']) {
+    const paper = await page(`papers/${name}`);
+    assert.ok(paper.includes('Preliminary'));
+    assert.ok(paper.includes('kazenoko-git/telos/blob/'));
+    assert.ok((await page('papers')).includes(`/papers/${name}/`));
+  }
+  const sitemap = await readFile('dist/sitemap.xml', 'utf8');
+  assert.equal(
+    (
+      sitemap.match(
+        /<loc>https:\/\/kazenoko.pages.dev\/projects\/prodo\/<\/loc>/g,
+      ) ?? []
+    ).length,
+    1,
+  );
+  assert.doesNotMatch(sitemap, /resonance|two-passes/i);
+});
