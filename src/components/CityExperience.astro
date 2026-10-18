@@ -1,0 +1,125 @@
+---
+import City from './City.astro';
+import { frontpageContent } from '../lib/content';
+const entries = await frontpageContent();
+const items = entries.map((e) => ({
+  title: e.data.title,
+  summary: e.data.summary,
+  cover: e.data.cover,
+  href: `/${e.collection}/${e.id}/`,
+  kind: e.collection,
+  placeholder: false,
+}));
+// Layout samples are explicitly labeled and disappear as real entries are added.
+for (const [kind, title] of [
+  ['projects', 'Project cover'],
+  ['papers', 'Paper cover'],
+  ['certifications', 'Certificate'],
+] as const) {
+  if (!entries.some((e) => e.collection === kind))
+    items.push({
+      title,
+      summary:
+        'A placeholder for your future work. Add an entry to this collection and its cover will appear here automatically.',
+      cover: undefined,
+      href: `/${kind}/`,
+      kind,
+      placeholder: true,
+    });
+}
+const billboardItems = Array.from(
+  { length: Math.max(items.length, 24) },
+  (_, i) => items[i % items.length],
+);
+---
+
+<section
+  id="city"
+  class="journey"
+  data-journey
+  aria-label="A city of work, transforming into a line portrait"
+>
+  <div class="journey-viewport">
+    <div class="journey-fallback">
+      <City />
+    </div>
+    <canvas
+      data-world
+      hidden
+      aria-label="A moving line-drawn city. Scroll to ascend and resolve into a line portrait of Ivan Samuel."
+    ></canvas>
+    <div
+      class="billboard-layer"
+      data-billboards
+      aria-label="Work on city billboards"
+    >
+      {billboardItems.map((item, index) => (
+        <a
+          class:list={['billboard', `billboard-${item.kind}`]}
+          href={item.href}
+          data-billboard
+          data-index={index}
+          data-title={item.title}
+          data-summary={item.summary}
+          data-kind={item.kind}
+          aria-describedby="billboard-popup"
+          tabindex="-1"
+          aria-hidden="true"
+        >
+          <span class="billboard-type">
+            {item.kind} / {String(index + 1).padStart(2, '0')}
+          </span>
+          {item.cover ? (
+            <img src={item.cover} alt="" loading="eager" decoding="async" />
+          ) : (
+            <span class="billboard-cover">
+              <span class="billboard-diagram" aria-hidden="true">
+                {item.kind === 'papers'
+                  ? '∑'
+                  : item.kind === 'certifications'
+                    ? '✳'
+                    : '⌘'}
+              </span>
+              <strong>{item.title}</strong>
+              <span class="billboard-placeholder">
+                {item.placeholder
+                  ? 'PLACEHOLDER / YOUR ART HERE'
+                  : 'COVER ART PENDING'}
+              </span>
+            </span>
+          )}
+          <span class="billboard-foot">
+            {item.placeholder ? 'LAYOUT SAMPLE' : 'EXPLORE'}{' '}
+            <span aria-hidden="true">↗</span>
+          </span>
+        </a>
+      ))}
+    </div>
+    <aside
+      class="billboard-popup"
+      id="billboard-popup"
+      data-popup
+      hidden
+      aria-label="Selected billboard"
+    >
+      <p class="eyebrow" data-popup-kind></p>
+      <h2 data-popup-title></h2>
+      <p data-popup-summary></p>
+      <a data-popup-open href="/projects/">
+        Open page ↗
+      </a>
+      <button data-popup-close aria-label="Close billboard description">
+        ×
+      </button>
+    </aside>
+    <div class="journey-bottom">
+      <div class="journey-actions">
+        <button data-flight-pause aria-pressed="false">
+          Pause motion
+        </button>
+        <a href="#profile">Skip to me ↓</a>
+        <a href="#city-contents">Browse the work ↗</a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import CityExperience from '../components/CityExperience.astro';
+import Profile from '../components/Profile.astro';
+---
+
+<Base cinematic>
+  <CityExperience />
+  <Profile />
+</Base>
+<script>
+  import { startJourney } from '../scene/journey';
+  startJourney();
+</script>

@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../lib/site';
+---
+
+<Base title="Contact">
+  <section class="wrap contact-simple">
+    <div>
+      <h1>Contact</h1>
+      <p>You’ll find my email and social links here.</p>
+    </div>
+    <div class="contact-details">
+      <div class="contact-detail">
+        <h2>Email</h2>
+        {site.email ? (
+          <a href={`mailto:${site.email}`}>{site.email} ↗</a>
+        ) : (
+          <p>Not added yet.</p>
+        )}
+      </div>
+      <div class="contact-detail">
+        <h2>Elsewhere</h2>
+        {site.socials.length ? (
+          <ul>
+            {site.socials.map((link) => (
+              <li>
+                <a href={link.url}>{link.label} ↗</a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>Social links will be added soon.</p>
+        )}
+      </div>
+      <a class="contact-home" href="/#profile">
+        ← Back to my profile
+      </a>
+    </div>
+  </section>
+</Base>

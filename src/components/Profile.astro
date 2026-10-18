@@ -1,0 +1,81 @@
+---
+import {
+  portraitSvgPaths,
+  PORTRAIT_ASPECT,
+  PORTRAIT_STROKE,
+} from '../scene/portrait';
+import EntryRow from './EntryRow.astro';
+import { frontpageContent } from '../lib/content';
+import { site } from '../lib/site';
+const entries = await frontpageContent();
+---
+
+<section class="profile-section wrap" id="profile">
+  <div class="profile-portrait" data-profile-portrait>
+    <svg
+      data-portrait-grid
+      class="portrait-lines"
+      viewBox={`0 0 1 ${PORTRAIT_ASPECT}`}
+      role="img"
+      aria-label="Line portrait of Ivan Samuel"
+    >
+      <g
+        fill="none"
+        stroke="#ccd6c4"
+        stroke-width={PORTRAIT_STROKE}
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        {portraitSvgPaths.map((d) => (
+          <path d={d} />
+        ))}
+      </g>
+    </svg>
+  </div>
+  <div class="profile-content">
+    <h1>
+      {site.name}
+      <span class="brand-dot">.</span>
+    </h1>
+    <p class="profile-lead">I like figuring out how things work.</p>
+    <p>
+      I’m interested in silicon, neuromorphic computing, software, and research.
+      This is where I collect what I’m making and the questions I’m working
+      through.
+    </p>
+    <div class="profile-current">
+      <span class="eyebrow">CURRENTLY</span>
+      <p>A first neuromorphic NPU design for Hack Club ASIC.</p>
+    </div>
+    <section id="city-contents" class="profile-latest">
+      <div class="section-heading">
+        <h2>Latest from the workbench</h2>
+      </div>
+      {entries.length ? (
+        entries
+          .slice(0, 6)
+          .map((entry, index) => <EntryRow entry={entry} index={index} />)
+      ) : (
+        <p>Projects, papers, and writing will appear here as they’re added.</p>
+      )}
+      <div class="profile-links">
+        <a href="/projects/">Projects ↗</a>
+        <a href="/writing/">Blogs ↗</a>
+        <a href="/papers/">Papers ↗</a>
+        <a href="/certifications/">Certifications ↗</a>
+      </div>
+    </section>
+    <section class="profile-contact">
+      <p class="eyebrow">CONTACT & ELSEWHERE</p>
+      {site.email ? (
+        <a href={`mailto:${site.email}`}>{site.email} ↗</a>
+      ) : (
+        <p>Contact details coming soon.</p>
+      )}
+      {site.socials.map((link) => (
+        <a href={link.url}>{link.label} ↗</a>
+      ))}
+      <a href="/contact/">Contact page ↗</a>
+    </section>
+  </div>
+</section>

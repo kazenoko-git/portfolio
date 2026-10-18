@@ -1,0 +1,126 @@
+---
+import { WORLD_SEED as CITY_SEED } from '../scene/world';
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+// A seeded architectural study: static SVG, readable without JavaScript or WebGL.
+let seed = CITY_SEED;
+const rand = () => {
+  seed = (seed * 16807) % 2147483647;
+  return seed / 2147483647;
+};
+const buildings = Array.from({ length: 34 }, (_, i) => {
+  const side = i % 2 === 0 ? -1 : 1;
+  const depth = Math.floor(i / 2);
+  const scale = Math.pow(0.86, depth);
+  const x = 720 + side * (210 * scale + 50);
+  const y = 320 + 250 * scale;
+  const width = (80 + rand() * 95) * scale;
+  const height = (140 + rand() * 340) * scale;
+  return {
+    x: side < 0 ? x - width : x,
+    y,
+    width,
+    height,
+    offset: (26 + rand() * 45) * scale * -side,
+    scale,
+    i,
+  };
+}).reverse();
+---
+
+<svg
+  class:list={['city-art', { compact }]}
+  viewBox="0 0 1440 650"
+  role="img"
+  aria-labelledby="city-title city-desc"
+  preserveAspectRatio="xMidYMid slice"
+>
+  <title id="city-title">An architectural city of systems</title>
+  <desc id="city-desc">
+    A seeded line drawing of buildings on either side of a straight road. A
+    concept study for the future interactive city.
+  </desc>
+  <defs>
+    <pattern
+      id="city-grid"
+      width="48"
+      height="48"
+      patternUnits="userSpaceOnUse"
+    >
+      <path d="M48 0H0V48" fill="none" stroke="#b7bab0" stroke-opacity=".06" />
+    </pattern>
+    <radialGradient id="city-haze">
+      <stop stop-color="#b8b9ad" stop-opacity=".08" />
+      <stop offset="1" stop-color="#101815" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="1440" height="650" fill="#101815" />
+  <rect width="1440" height="650" fill="url(#city-grid)" />
+  <ellipse cx="720" cy="300" rx="500" ry="350" fill="url(#city-haze)" />
+  <g fill="none" stroke="#abb4a5" stroke-width=".8" stroke-opacity=".25">
+    {Array.from({ length: 15 }, (_, i) => (
+      <path d={`M720 310L${-1000 + i * 250} 680`} />
+    ))}
+    {[360, 385, 420, 470, 540, 630].map((y) => (
+      <path d={`M0 ${y}H1440`} />
+    ))}
+  </g>
+  <g fill="#101815" stroke="#a6b19f" stroke-width="1" stroke-linejoin="round">
+    {buildings.map((b) => (
+      <g opacity={0.3 + b.scale * 0.65}>
+        <path
+          d={`M${b.x} ${b.y}v${-b.height}h${b.width}l${b.offset} ${-b.offset * 0.4}v${b.height}l${-b.offset} ${b.offset * 0.4}Z`}
+        />
+        <path
+          d={`M${b.x} ${b.y - b.height}l${b.offset} ${-b.offset * 0.4}h${b.width}M${b.x + b.width} ${b.y}v${-b.height}`}
+          fill="none"
+        />
+        {Array.from({ length: 9 }, (_, i) => (
+          <path
+            d={`M${b.x} ${b.y - (b.height * (i + 1)) / 10}h${b.width}l${b.offset} ${-b.offset * 0.4}`}
+            fill="none"
+            stroke-opacity=".48"
+          />
+        ))}
+        {[0.25, 0.5, 0.75].map((t) => (
+          <path
+            d={`M${b.x + b.width * t} ${b.y}v${-b.height}`}
+            fill="none"
+            stroke-opacity=".4"
+          />
+        ))}
+      </g>
+    ))}
+  </g>
+  <path
+    d="M688 325L460 650M752 325L980 650"
+    fill="none"
+    stroke="#ef683e"
+    stroke-opacity=".65"
+  />
+  <path
+    d="M720 375V390M720 420V448M720 490V535M720 590V650"
+    stroke="#b7baa9"
+    stroke-width="2"
+  />
+  <g stroke="#ef683e" fill="none">
+    <circle cx="720" cy="310" r="10" />
+    <path d="M702 310h36M720 292v36" />
+  </g>
+  <g font-family="monospace" font-size="10" fill="#859282">
+    <text x="35" y="42">
+      FIG. 001 / PROCEDURAL CITY STUDY
+    </text>
+    <text x="1220" y="42">
+      SEED {String(CITY_SEED).padStart(6, '0')}
+    </text>
+    <text x="35" y="620">
+      X 00.00 / Y 00.00 / Z 01.00
+    </text>
+    <text x="1200" y="620">
+      PERSPECTIVE / 01
+    </text>
+  </g>
+</svg>

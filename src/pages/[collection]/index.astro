@@ -1,0 +1,222 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import EntryRow from '../../components/EntryRow.astro';
+import { formatDate } from '../../lib/content';
+export function getStaticPaths() {
+  return ['writing', 'projects', 'papers', 'certifications'].map(
+    (collection) => ({ params: { collection } }),
+  );
+}
+const collection = Astro.params.collection as
+  'writing' | 'projects' | 'papers' | 'certifications';
+const config = {
+  writing: {
+    title: 'Blogs',
+    description: 'Things I’m learning, building, and thinking about.',
+    recent: 'Recent blogs',
+    empty: 'No blogs published yet.',
+    search: 'Search blogs',
+  },
+  projects: {
+    title: 'Projects',
+    description: 'What I’m working on and what I’ve built.',
+    recent: 'Recent projects',
+    empty: 'No projects added yet.',
+    search: 'Search projects',
+  },
+  papers: {
+    title: 'Papers',
+    description: 'My papers and research.',
+    recent: 'Recent papers',
+    empty: 'No papers published yet.',
+    search: 'Search papers',
+  },
+  certifications: {
+    title: 'Certifications',
+    description: 'Courses and certifications I’ve completed.',
+    recent: 'Recent certifications',
+    empty: 'No certifications added yet.',
+    search: 'Search certifications',
+  },
+}[collection];
+const all = (await getCollection(collection)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const isDraft = (entry: (typeof all)[number]) =>
+  'draft' in entry.data && entry.data.draft;
+const entries = all.filter((e) => !isDraft(e));
+const drafts = all.filter(isDraft);
+const tags = [...new Set(entries.flatMap((e) => e.data.tags))].sort((a, b) =>
+  a.localeCompare(b),
+);
+---
+
+<Base title={config.title} description={config.description}>
+  <div class="wrap library" data-library>
+    <section class="library-intro">
+      <div>
+        <h1>{config.title}</h1>
+        <p>{config.description}</p>
+      </div>
+      <div class="library-search" data-search-controls hidden>
+        <label for="entry-search">{config.search}</label>
+        <div class="search-field">
+          <span aria-hidden="true">⌕</span>
+          <input
+            id="entry-search"
+            type="search"
+            placeholder="Title, topic, or keyword"
+            autocomplete="off"
+            data-entry-search
+          />
+        </div>
+        <div class="library-tags" role="group" aria-label="Filter by tag">
+          <button type="button" data-tag="" aria-pressed="true">
+            All
+          </button>
+          {tags.map((tag) => (
+            <button type="button" data-tag={tag} aria-pressed="false">
+              {tag}
+            </button>
+          ))}
+        </div>
+        {!tags.length && (
+          <p class="search-hint">Tags will appear as entries are added.</p>
+        )}
+      </div>
+    </section>
+    <section class="library-results" aria-labelledby="results-heading">
+      <div class="library-results-heading">
+        <h2
+          id="results-heading"
+          data-results-heading
+          data-recent={config.recent}
+        >
+          {config.recent}
+        </h2>
+        <p role="status" aria-live="polite" data-result-count>
+          {entries.length} {entries.length === 1 ? 'entry' : 'entries'}
+        </p>
+      </div>
+      {entries.length ? (
+        <div class="preview-list">
+          {entries.map((entry, index) => (
+            <article
+              class:list={['entry-preview', { 'latest-preview': index === 0 }]}
+              data-search-entry
+              data-search-text={`${entry.data.title} ${entry.data.summary} ${entry.data.tags.join(' ')}`}
+              data-tags={JSON.stringify(entry.data.tags)}
+            >
+              <a href={`/${collection}/${entry.id}/`}>
+                {entry.data.cover && (
+                  <img
+                    class="entry-cover"
+                    src={entry.data.cover}
+                    alt=""
+                    loading="lazy"
+                    width="640"
+                    height="400"
+                  />
+                )}
+                <div class="entry-preview-copy">
+                  <div class="preview-meta">
+                    <time datetime={entry.data.date.toISOString()}>
+                      {formatDate(entry.data.date)}
+                    </time>
+                    <span>{entry.data.status}</span>
+                  </div>
+                  <h3>
+                    {entry.data.title}
+                    <span aria-hidden="true">↗</span>
+                  </h3>
+                  <p>{entry.data.summary}</p>
+                  <ul class="preview-tags" aria-label="Tags">
+                    {entry.data.tags.map((tag) => (
+                      <li>{tag}</li>
+                    ))}
+                  </ul>
+                </div>
+              </a>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p class="library-empty">{config.empty}</p>
+      )}
+      <p class="library-empty" data-no-results hidden>
+        No matches. Try another keyword or tag.
+      </p>
+    </section>
+    {drafts.length > 0 && (
+      <section class="library-drafts">
+        <h2>Drafts</h2>
+        {drafts.map((entry, index) => (
+          <EntryRow entry={entry} index={index} />
+        ))}
+      </section>
+    )}
+  </div>
+  <script>
+    import { matchesEntry } from '../../lib/search';
+    const library = document.querySelector<HTMLElement>('[data-library]');
+    if (library) {
+      library.querySelector<HTMLElement>('[data-search-controls]')!.hidden =
+        false;
+      const input = library.querySelector<HTMLInputElement>(
+        '[data-entry-search]',
+      )!;
+      const buttons = [
+        ...library.querySelectorAll<HTMLButtonElement>('[data-tag]'),
+      ];
+      const rows = [
+        ...library.querySelectorAll<HTMLElement>('[data-search-entry]'),
+      ].map((element) => ({
+        element,
+        text: element.dataset.searchText ?? '',
+        tags: JSON.parse(element.dataset.tags ?? '[]') as string[],
+      }));
+      const heading = library.querySelector<HTMLElement>(
+        '[data-results-heading]',
+      )!;
+      let tag = '';
+      const update = () => {
+        let count = 0;
+        rows.forEach((row) => {
+          row.element.hidden = !matchesEntry(
+            row.text,
+            row.tags,
+            input.value,
+            tag,
+          );
+          if (!row.element.hidden) count++;
+        });
+        heading.textContent =
+          input.value.trim() || tag
+            ? 'Search results'
+            : heading.dataset.recent!;
+        library.querySelector<HTMLElement>('[data-result-count]')!.textContent =
+          `${count} ${count === 1 ? 'entry' : 'entries'}`;
+        library.querySelector<HTMLElement>('[data-no-results]')!.hidden =
+          count > 0 || (!input.value.trim() && !tag);
+        const empty = library.querySelector<HTMLElement>(
+          '.library-results > .library-empty:not([data-no-results])',
+        );
+        if (empty) empty.hidden = Boolean(input.value.trim() || tag);
+        buttons.forEach((button) =>
+          button.setAttribute(
+            'aria-pressed',
+            String(button.dataset.tag === tag),
+          ),
+        );
+      };
+      input.addEventListener('input', update);
+      buttons.forEach((button) =>
+        button.addEventListener('click', () => {
+          tag = button.dataset.tag ?? '';
+          update();
+        }),
+      );
+    }
+  </script>
+</Base>

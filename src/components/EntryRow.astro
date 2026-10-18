@@ -1,0 +1,21 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props {
+  entry: CollectionEntry<'writing' | 'projects' | 'papers' | 'certifications'>;
+  index?: number;
+}
+const { entry, index = 0 } = Astro.props;
+---
+
+<a class="entry-row" href={`/${entry.collection}/${entry.id}`}>
+  <span class="mono row-number">{String(index + 1).padStart(2, '0')}</span>
+  <div>
+    <p class="eyebrow">{entry.data.tags.join(' / ')}</p>
+    <h3>{entry.data.title}</h3>
+    <p class="row-summary">{entry.data.summary}</p>
+  </div>
+  <span class="status mono">{entry.data.status}</span>
+  <span class="row-arrow" aria-hidden="true">
+    ↗
+  </span>
+</a>

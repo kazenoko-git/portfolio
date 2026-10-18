@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="100%" height="100%">
+  <defs>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="400" height="500" fill="#0b100f" />
+
+  <g stroke="#ccd6c4" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)">
+    <!-- 1. Hair Curls Silhouette and Flow Lines -->
+    <!-- Outer Hair Dome -->
+    <path d="M 115 175 C 90 150, 95 100, 130 80 C 150 60, 190 50, 220 55 C 260 50, 300 70, 315 105 C 325 125, 320 160, 305 185" stroke-width="2" />
+
+    <!-- Internal Hair Waves and Curls -->
+    <path d="M 125 155 C 140 135, 175 140, 185 115 C 195 95, 230 95, 245 115 C 260 130, 290 120, 305 145" stroke-width="1.5" />
+    <path d="M 140 125 C 160 105, 190 110, 205 90 C 220 75, 255 75, 275 95" stroke-width="1.4" />
+    <path d="M 155 90 C 175 75, 210 70, 230 85 C 245 95, 270 85, 285 105" stroke-width="1.3" />
+    <path d="M 110 130 C 120 115, 145 120, 155 105 C 165 95, 185 95, 195 110" stroke-width="1.2" />
+    <path d="M 235 65 C 255 60, 285 75, 295 95 C 305 110, 315 130, 310 150" stroke-width="1.3" />
+
+    <!-- Bangs Framing Forehead -->
+    <path d="M 125 175 C 140 185, 160 170, 175 185 C 190 195, 210 180, 230 190 C 250 195, 275 180, 290 190" stroke-width="1.6" />
+    <path d="M 150 180 C 165 195, 185 185, 200 200 C 215 190, 240 200, 255 185" stroke-width="1.4" />
+
+    <!-- 2. Eyebrows -->
+    <path d="M 135 210 C 150 202, 175 205, 190 215" stroke-width="2.2" />
+    <path d="M 225 210 C 245 200, 270 202, 285 212" stroke-width="2.2" />
+
+    <!-- 3. Round Spectacles (Subtle 3/4 Perspective) -->
+    <!-- Left Lens Frame (Angled 3/4) -->
+    <ellipse cx="160" cy="245" rx="36" ry="34" transform="rotate(-3 160 245)" stroke-width="2.2" />
+    <!-- Left Eye Details -->
+    <path d="M 142 242 C 152 235, 168 235, 178 242" stroke-width="1.5" />
+    <path d="M 146 244 C 154 250, 166 250, 174 244" stroke-width="1.2" />
+    <circle cx="160" cy="242" r="3.5" fill="#ccd6c4" />
+
+    <!-- Bridge -->
+    <path d="M 196 242 C 205 238, 215 238, 224 242" stroke-width="2" />
+
+    <!-- Right Lens Frame -->
+    <ellipse cx="255" cy="242" rx="34" ry="33" transform="rotate(-2 255 242)" stroke-width="2.2" />
+    <!-- Right Eye Details -->
+    <path d="M 238 239 C 247 232, 263 232, 272 239" stroke-width="1.5" />
+    <path d="M 242 241 C 250 247, 261 247, 268 241" stroke-width="1.2" />
+    <circle cx="255" cy="239" r="3.5" fill="#ccd6c4" />
+
+    <!-- Right Glasses Temple Arm to Ear -->
+    <path d="M 289 240 L 308 236" stroke-width="1.8" />
+
+    <!-- 4. Nose Bridge and Tip -->
+    <path d="M 208 238 L 205 272 C 203 285, 195 292, 204 296 C 212 298, 218 290, 218 282" stroke-width="1.8" />
+    <path d="M 196 288 C 194 294, 202 296, 206 295" stroke-width="1.4" />
+
+    <!-- 5. Lips and Philtrum -->
+    <path d="M 207 302 L 207 312" stroke-width="1.2" />
+    <path d="M 188 325 C 198 320, 207 322, 214 320 C 222 322, 230 326, 234 328" stroke-width="1.8" />
+    <path d="M 192 327 C 204 330, 218 330, 230 329" stroke-width="1.4" />
+    <path d="M 198 338 C 208 344, 218 344, 226 339" stroke-width="1.6" />
+
+    <!-- 6. Jawline, Chin, Ear and Contour -->
+    <!-- Left Jaw Contour -->
+    <path d="M 125 240 C 122 280, 135 320, 160 355 C 180 380, 205 388, 220 388 C 240 388, 270 365, 290 320 C 300 295, 305 265, 305 245" stroke-width="2" />
+
+    <!-- Chin Highlight Contour -->
+    <path d="M 200 370 C 210 376, 220 376, 228 370" stroke-width="1.4" />
+
+    <!-- Right Ear Profile -->
+    <path d="M 305 230 C 318 230, 325 245, 322 265 C 320 280, 310 295, 302 298" stroke-width="1.8" />
+    <path d="M 312 245 C 316 252, 315 265, 310 272" stroke-width="1.2" />
+
+    <!-- 7. Neck & Shoulders -->
+    <!-- Neck Lines -->
+    <path d="M 175 375 L 170 425" stroke-width="1.8" />
+    <path d="M 268 360 C 275 385, 280 410, 282 425" stroke-width="1.8" />
+
+    <!-- Collar -->
+    <path d="M 170 425 C 195 448, 255 448, 282 425" stroke-width="2.2" />
+    <path d="M 165 432 C 195 456, 255 456, 287 432" stroke-width="1.5" />
+
+    <!-- Shoulders Sloping Out -->
+    <path d="M 170 425 C 140 435, 90 455, 40 480" stroke-width="2" />
+    <path d="M 282 425 C 310 435, 350 455, 390 480" stroke-width="2" />
+  </g>
+</svg>

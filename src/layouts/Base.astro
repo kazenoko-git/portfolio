@@ -1,0 +1,84 @@
+---
+import '@fontsource/dm-sans/latin-400.css';
+import '@fontsource/dm-sans/latin-500.css';
+import '@fontsource/dm-sans/latin-700.css';
+import '@fontsource/ibm-plex-mono/latin-400.css';
+import '../styles/global.css';
+import { site, navigation } from '../lib/site';
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+  cinematic?: boolean;
+}
+const {
+  title,
+  description = site.description,
+  noindex = false,
+  cinematic = false,
+} = Astro.props;
+const pageTitle = title ? `${title} — kazenoko` : 'kazenoko';
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0b100f" />
+    <title>{pageTitle}</title>
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta
+      property="og:image"
+      content={new URL('/images/share.png', Astro.site)}
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="kazenoko — Writing"
+      href="/rss.xml"
+    />
+  </head>
+  <body class:list={{ cinematic }}>
+    <a class="skip-link" href="#main">
+      Skip to content
+    </a>
+    <header class="site-header">
+      <nav aria-label="Main navigation">
+        {navigation.map(([label, href]) => (
+          <a
+            href={href}
+            aria-current={
+              Astro.url.pathname.startsWith(href) ? 'page' : undefined
+            }
+          >
+            {label}
+          </a>
+        ))}
+      </nav>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <a class="wordmark" href="/">
+        kazenoko<span class="brand-dot">.</span>
+      </a>
+      <a href="/">Home</a>
+      <div class="footer-links">
+        <a href="/rss.xml">RSS ↗</a>
+        <a href="/contact">Contact ↗</a>
+        <span class="mono">© {new Date().getFullYear()}</span>
+      </div>
+    </footer>
+  </body>
+</html>
