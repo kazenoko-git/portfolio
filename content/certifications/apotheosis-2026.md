@@ -5,6 +5,9 @@ date: 2026-07-24
 issuer: Delhi Public School Bangalore North
 tags: [Hackathon, Award, Klima]
 status: Awarded
+cover: /images/certificates/apotheosis-2026.webp
+coverAlt: Impressions Apotheosis certificate awarded to A Ivan Samuel for second place in The Architect
+coverCaption: The actual certificate · DPS Bangalore North, July 2026
 ---
 
 ## The award

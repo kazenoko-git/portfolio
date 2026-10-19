@@ -5,6 +5,7 @@ export interface CatalogEntry {
     title: string;
     summary: string;
     date: Date;
+    projectMonth?: string;
     cover?: string;
     draft?: boolean;
     city?: boolean;
@@ -17,7 +18,12 @@ export function cityCatalog<T extends CatalogEntry>(entries: T[]): T[] {
     .sort(
       (a, b) =>
         (a.data.featuredOrder ?? 100) - (b.data.featuredOrder ?? 100) ||
-        b.data.date.valueOf() - a.data.date.valueOf() ||
+        (b.data.projectMonth
+          ? Date.parse(`${b.data.projectMonth}-01`)
+          : b.data.date.valueOf()) -
+          (a.data.projectMonth
+            ? Date.parse(`${a.data.projectMonth}-01`)
+            : a.data.date.valueOf()) ||
         `${a.collection}/${a.id}`.localeCompare(`${b.collection}/${b.id}`),
     );
 }

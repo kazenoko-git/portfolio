@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" role="img"><title>Somewhere a little cooler</title><rect width="900" height="500" fill="#c5d9ae"/>
+    <g fill="none" stroke="#8eac77" stroke-width="3"><path d="M-50 140Q150 -30 310 140T650 100T1000 160M-50 170Q150 0 310 170T650 130T1000 190M-50 205Q150 35 310 205T650 165T1000 225M-50 400Q170 220 390 400T900 390M-50 435Q170 255 390 435T900 425M-50 470Q170 290 390 470T900 460"/></g>
+    <path d="M90 360Q260 190 450 310T840 220" fill="none" stroke="#f7f1d4" stroke-width="26"/>
+    <path d="M90 360Q260 190 450 310T840 220" fill="none" stroke="#25251f" stroke-width="3" stroke-dasharray="7 13"/>
+    <g transform="rotate(-5 450 245)"><path d="M375 205L465 125L555 205V330H375Z" fill="#f8f4df" stroke="#25251f" stroke-width="5"/>
+    <path d="M350 210L465 105L580 210M445 330V255H490V330" fill="none" stroke="#25251f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M405 205H430V235H405Z" fill="#edac70"/>
+    <path d="M565 110Q565 65 608 65Q652 65 652 110Q652 140 608 185Q565 140 565 110Z" fill="#f07763" stroke="#25251f" stroke-width="5"/>
+    <circle cx="608" cy="108" r="12" fill="#f8f4df"/></g>
+    <path d="M175 115L175 178M145 145H205M728 330L728 385M701 357H755" fill="none" stroke="#25251f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="90" y="440" fill="#25251f" font-family="monospace" font-size="19">FIND A LITTLE SHELTER.</text>
+  </svg>

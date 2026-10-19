@@ -113,6 +113,8 @@ export function makeEntry(
       'issuer',
       'credentialUrl',
       'pdfUrl',
+      'projectPeriod',
+      'projectMonth',
     ]
       .filter((field) => data[field] !== undefined)
       .map((field) => [field, data[field]]),
@@ -140,6 +142,13 @@ export function makeEntry(
       category: repo.language ?? 'Software',
       technologies: repo.language ? [repo.language] : [],
       repoUrl: repo.html_url,
+      ...repositoryCover(body, source),
+      ...(override.projectPeriod
+        ? {
+            projectPeriod: override.projectPeriod,
+            projectMonth: override.projectMonth,
+          }
+        : {}),
       ...(document.collection === 'papers'
         ? {
             authors: document.authors ?? [],
@@ -154,6 +163,33 @@ export function makeEntry(
       ...metadata,
       source,
     },
+  };
+}
+
+export function repositoryCover(body, source) {
+  const candidates = [
+    ...body.matchAll(
+      /!\[([^\]]*)\]\(([^\s)]+)(?:\s+[^)]*)?\)|<img\b[^>]*\bsrc=["']([^"']+)["']/gi,
+    ),
+  ]
+    .map((match) => ({ alt: match[1] ?? '', url: match[2] ?? match[3] }))
+    .filter(
+      (image) =>
+        !/shields\.io|badge|license|favicon|react\.svg|vite\.svg|tauri\.svg/i.test(
+          image.url,
+        ),
+    );
+  const image =
+    candidates.find((image) =>
+      /figure|screenshot|hero|chart|plot|graph/i.test(image.url),
+    ) ?? candidates[0];
+  if (!image) return {};
+  const cover = rewriteSourceUrl(image.url, source, true);
+  if (!/^https:\/\//.test(cover)) return {};
+  return {
+    cover,
+    coverAlt: image.alt || `Image from ${source.repo}`,
+    coverCaption: `From the ${source.repo.split('/')[1]} repository`,
   };
 }
 

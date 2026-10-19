@@ -1,11 +1,12 @@
 ---
 import City from './City.astro';
 import { frontpageContent } from '../lib/content';
+import { entryVisual } from '../lib/presentation';
 const entries = await frontpageContent();
 const items = entries.map((e) => ({
   title: e.data.title,
   summary: e.data.summary,
-  cover: e.data.cover,
+  cover: entryVisual(e).src,
   href: `/${e.collection}/${e.id}/`,
   kind: e.collection,
   placeholder: false,
@@ -21,7 +22,7 @@ for (const [kind, title] of [
       title,
       summary:
         'A placeholder for your future work. Add an entry to this collection and its cover will appear here automatically.',
-      cover: undefined,
+      cover: '/images/projects/code.svg',
       href: `/${kind}/`,
       kind,
       placeholder: true,

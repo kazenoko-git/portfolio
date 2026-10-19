@@ -2,6 +2,8 @@
 title: Klima
 summary: A climate-refuge mapping prototype that uses weather and nearby facilities to rank potential places to shelter from extreme weather.
 date: 2026-10-18
+projectPeriod: Around June–July 2026
+projectMonth: 2026-06
 category: Software
 technologies: [Python, FastAPI, JavaScript]
 tags: [Climate, Mapping, Hackathon]
@@ -10,6 +12,8 @@ repoUrl: https://github.com/kazenoko-git/Klima
 ---
 
 ## The idea
+
+Built around June–July 2026.
 
 Klima explores how location, weather, and nearby facilities can help identify potential climate refuges. Its API exposes weather, facilities, and ranked refuge results for a selected location.
 

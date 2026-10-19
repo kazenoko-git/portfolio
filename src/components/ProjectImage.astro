@@ -1,0 +1,29 @@
+---
+import { entryVisual } from '../lib/presentation';
+import type { CollectionEntry } from 'astro:content';
+interface Props {
+  entry: CollectionEntry<'projects' | 'papers' | 'writing' | 'certifications'>;
+  hero?: boolean;
+}
+const { entry, hero = false } = Astro.props;
+const visual = entryVisual(entry);
+---
+
+<figure class:list={['project-image', { 'project-image-hero': hero }]}>
+  <div
+    class:list={[
+      'project-image-frame',
+      { 'rotated-document': visual.rotation !== 0 },
+    ]}
+  >
+    <img
+      src={visual.src}
+      alt={visual.alt}
+      width="900"
+      height="500"
+      loading={hero ? 'eager' : 'lazy'}
+      style={visual.rotation ? `--image-turn:${visual.rotation}deg` : undefined}
+    />
+  </div>
+  <figcaption>{visual.caption}</figcaption>
+</figure>

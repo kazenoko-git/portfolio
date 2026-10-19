@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" role="img"><title>An atom, approximately</title><rect width="900" height="500" fill="#cdc6f1"/>
+    <g transform="translate(445 245)"><ellipse rx="240" ry="79" transform="rotate(-28)" fill="#e8e2ff" stroke="#353064" stroke-width="5"/>
+    <ellipse rx="240" ry="79" transform="rotate(30)" fill="none" stroke="#353064" stroke-width="5"/>
+    <ellipse rx="240" ry="79" transform="rotate(90)" fill="none" stroke="#353064" stroke-width="5"/>
+    <circle r="45" fill="#f59d70" stroke="#353064" stroke-width="5"/><circle cx="213" cy="-74" r="17" fill="#f5f1ba" stroke="#353064" stroke-width="4"/>
+    <circle cx="-140" cy="-115" r="13" fill="#f5f1ba" stroke="#353064" stroke-width="4"/></g>
+    <path d="M720 190L770 135L820 135M230 352L177 402H100" fill="none" stroke="#25251f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="90" y="445" fill="#25251f" font-family="monospace" font-size="19">A QUESTION OF PROBABILITY.</text><text x="680" y="112" fill="#25251f" font-family="monospace" font-size="16">not to scale</text>
+  </svg>

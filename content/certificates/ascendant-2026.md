@@ -5,6 +5,9 @@ date: 2026-07-18
 issuer: Delhi Public School Bangalore East
 tags: [Hackathon, Award, Prodo]
 status: Awarded
+cover: /images/certificates/ascendant-2026.webp
+coverAlt: Ascendant certificate of merit awarded to A Ivan Samuel for Runner-up I
+coverCaption: The actual certificate · DPS Bangalore East, July 2026
 ---
 
 ## The award

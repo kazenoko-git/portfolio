@@ -2,6 +2,8 @@
 title: Prodo
 summary: A gamified focus tool that treats sustained attention as an economy, with earned breaks and context-aware distraction handling.
 date: 2026-10-18
+projectPeriod: Around May–June 2026
+projectMonth: 2026-05
 category: Software
 technologies: [Python, TypeScript, Tauri]
 tags: [Productivity, Hackathon]
@@ -11,7 +13,7 @@ repoUrl: https://github.com/fourtysevencode/prodo
 
 ## The idea
 
-Started in June 2026.
+Built around May–June 2026.
 
 Prodo explores an alternative to rigid app blocking: earn rewards through sustained focus and spend them on breaks. The project combines attention monitoring with a gamified focus experience across desktop, web, and mobile components.
 

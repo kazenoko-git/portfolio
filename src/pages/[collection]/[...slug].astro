@@ -1,7 +1,9 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { formatDate, readingTime } from '../../lib/content';
+import { readingTime } from '../../lib/content';
+import { entryDate, entryVisual } from '../../lib/presentation';
+import ProjectImage from '../../components/ProjectImage.astro';
 import { site } from '../../lib/site';
 export async function getStaticPaths() {
   const collections = [
@@ -37,6 +39,14 @@ const structuredData = {
   headline: entry.data.title,
   description: entry.data.summary,
   url: new URL(Astro.url.pathname, Astro.site).href,
+  image: {
+    '@type': 'ImageObject',
+    url: new URL(entryVisual(entry).src, Astro.site).href,
+    caption: entryVisual(entry).caption,
+  },
+  ...(entry.collection === 'projects' && entry.data.projectPeriod
+    ? { temporalCoverage: entry.data.projectPeriod }
+    : {}),
   ...(entry.data.source && entry.data.dateLabel !== 'Published'
     ? { dateModified: entry.data.source.updatedAt.toISOString() }
     : { datePublished: entry.data.date.toISOString() }),
@@ -70,7 +80,7 @@ const structuredData = {
 >
   <div class="wrap article-top">
     <a href={`/${entry.collection}`} class="mono back-link">
-      ← ALL {entry.collection.toUpperCase()}
+      ← All {entry.collection}
     </a>
   </div>
   <header class="wrap article-header">
@@ -78,11 +88,13 @@ const structuredData = {
     <h1>{entry.data.title}</h1>
     <p>{entry.data.summary}</p>
     <div class="article-meta mono">
-      <span>{entry.data.dateLabel}</span>
-      <time datetime={entry.data.date.toISOString()}>
-        {formatDate(entry.data.date)}
-      </time>
-      <span>{readingTime(entry.body)} MIN READ</span>
+      <span>
+        {entry.collection === 'projects' && entry.data.projectPeriod
+          ? 'Project period · '
+          : ''}
+        {entryDate(entry)}
+      </span>
+      <span>{readingTime(entry.body)} min read</span>
       <span>{entry.data.status}</span>
       {repoUrl && <a href={repoUrl}>Project repository ↗</a>}
     </div>
@@ -96,9 +108,12 @@ const structuredData = {
       </div>
     )}
   </header>
+  <div class="wrap article-art">
+    <ProjectImage entry={entry} hero />
+  </div>
   <div class="wrap article-grid">
     <aside class="toc">
-      <p class="eyebrow">ON THIS PAGE</p>
+      <p class="eyebrow">On this page</p>
       <nav aria-label="Table of contents">
         {headings
           .filter((h) => h.depth === 2)
@@ -107,7 +122,7 @@ const structuredData = {
           ))}
       </nav>
       <a href="#main" class="mono back-top">
-        BACK TO TOP ↑
+        Back to top ↑
       </a>
     </aside>
     <article class="prose">

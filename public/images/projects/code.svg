@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" role="img"><title>A small experiment</title><rect width="900" height="500" fill="#abd1d4"/>
+    <g transform="rotate(-5 450 250)"><path d="M235 125H670V370H235Z" fill="#f8f0d9" stroke="#25251f" stroke-width="5"/>
+    <path d="M235 175H670M315 200L275 245L315 290M590 200L630 245L590 290M475 195L425 305" fill="none" stroke="#25251f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="260" cy="151" r="6" fill="#ef9c76"/><circle cx="280" cy="151" r="6" fill="#adbb91"/>
+    <path d="M215 370H690L730 400H170Z" fill="#cdc6f1" stroke="#25251f" stroke-width="5"/></g>
+    <path d="M130 115L140 140L167 145L144 160L140 189L122 167L94 168L111 144L105 121Z" fill="#ead18a" stroke="#25251f" stroke-width="4"/>
+    <text x="90" y="455" fill="#25251f" font-family="monospace" font-size="19">WHAT IF THIS WORKED?</text>
+  </svg>

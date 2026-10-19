@@ -13,6 +13,11 @@ const common = z.object({
   summary: z.string(),
   date: z.coerce.date(),
   dateLabel: z.string().default('Published'),
+  projectPeriod: z.string().optional(),
+  projectMonth: z
+    .string()
+    .regex(/^\d{4}-(0[1-9]|1[0-2])$/)
+    .optional(),
   source: source.optional(),
   repositoryDocumentation: source.extend({ html: z.string() }).optional(),
   tags: z.array(z.string()).default([]),
@@ -22,6 +27,9 @@ const common = z.object({
   city: z.boolean().default(true),
   featuredOrder: z.number().default(100),
   cover: z.string().optional(),
+  coverAlt: z.string().optional(),
+  coverCaption: z.string().optional(),
+  coverRotation: z.number().default(0),
   links: z.array(z.object({ label: z.string(), url: z.url() })).default([]),
 });
 const writing = defineCollection({

@@ -1,16 +1,26 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { entryVisual, entryDate } from '../lib/presentation';
 interface Props {
   entry: CollectionEntry<'writing' | 'projects' | 'papers' | 'certifications'>;
   index?: number;
 }
 const { entry, index = 0 } = Astro.props;
+const visual = entryVisual(entry);
 ---
 
 <a class="entry-row" href={`/${entry.collection}/${entry.id}`}>
   <span class="mono row-number">{String(index + 1).padStart(2, '0')}</span>
+  <img
+    class="row-thumbnail"
+    src={visual.src}
+    alt=""
+    width="100"
+    height="75"
+    loading="lazy"
+  />
   <div>
-    <p class="eyebrow">{entry.data.tags.join(' / ')}</p>
+    <p class="eyebrow">{entryDate(entry)}</p>
     <h3>{entry.data.title}</h3>
     <p class="row-summary">{entry.data.summary}</p>
   </div>

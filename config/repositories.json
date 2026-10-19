@@ -10,22 +10,40 @@
   "overrides": {
     "kazenoko-git/sensitiveDataFinder": {
       "slug": "sdfr",
-      "title": "SDFr — Sensitive Data Finder"
+      "title": "SDFr \u2014 Sensitive Data Finder",
+      "projectPeriod": "May 2025",
+      "projectMonth": "2025-05"
     },
     "kazenoko-git/cyber-monopoly": {
       "slug": "deploy-or-die",
-      "title": "Deploy or Die"
+      "title": "Deploy or Die",
+      "projectPeriod": "February 2026",
+      "projectMonth": "2026-02"
     },
     "kazenoko-git/Eternae-aurora": {
       "slug": "eternae",
-      "title": "Eternae / Aurora Engine"
+      "title": "Eternae / Aurora Engine",
+      "projectPeriod": "January 2026",
+      "projectMonth": "2026-01"
     },
     "kazenoko-git/Radiant": {
-      "summary": "Satellite-imagery analysis for checking solar-panel installation claims, including panel counts and area estimates."
+      "summary": "Satellite-imagery analysis for checking solar-panel installation claims, including panel counts and area estimates.",
+      "projectPeriod": "October 2025",
+      "projectMonth": "2025-10"
     },
     "kazenoko-git/Talos": {
       "slug": "neuromorphic-npu",
-      "ref": "talos_2"
+      "ref": "talos_2",
+      "projectPeriod": "October 2026\u2013present",
+      "projectMonth": "2026-10"
+    },
+    "kazenoko-git/AtomQM": {
+      "projectPeriod": "June 2025",
+      "projectMonth": "2025-06"
+    },
+    "kazenoko-git/telos": {
+      "projectPeriod": "August 2026\u2013present",
+      "projectMonth": "2026-08"
     }
   },
   "documents": [

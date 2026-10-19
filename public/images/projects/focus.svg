@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" role="img"><title>A little focus goes a long way</title><rect width="900" height="500" fill="#ffa86c"/>
+    <path d="M0 390Q220 330 430 400T900 350" fill="none" stroke="#ef8156" stroke-width="100"/>
+    <g transform="rotate(-8 360 270)"><rect x="170" y="70" width="370" height="350" rx="30" fill="#fff7dc" stroke="#25251f" stroke-width="5"/>
+    <circle cx="355" cy="240" r="112" fill="none" stroke="#25251f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="355" cy="240" r="88" fill="#e9e8a9"/>
+    <path d="M355 160V240L408 275M270 100H440" fill="none" stroke="#25251f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="355" cy="240" r="9" fill="#25251f"/>
+    <text x="272" y="390" fill="#25251f" font-family="monospace" font-size="25">MAKE TIME.</text></g>
+    <g transform="rotate(9 660 330)"><path d="M565 225H775V395H565Z" fill="#eee8fc" stroke="#25251f" stroke-width="4" stroke-dasharray="10 6"/>
+    <text x="599" y="270" fill="#25251f" font-family="monospace" font-size="19">ONE GOOD</text><text x="605" y="300" fill="#25251f" font-family="monospace" font-size="19">BREAK</text>
+    <path d="M620 325V350Q620 380 650 380H675Q704 380 704 350V325ZM704 330Q750 330 736 355Q727 367 704 360" fill="none" stroke="#25251f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <path d="M690 85L700 110L727 115L704 130L700 159L682 137L654 138L671 114L665 91Z" fill="#f4f3b4" stroke="#25251f" stroke-width="4"/>
+  </svg>

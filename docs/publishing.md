@@ -79,6 +79,8 @@ imported, though previous public deployments can still exist in Pages history.
 title: My project
 summary: What it does and why I built it.
 date: 2026-10-18
+projectPeriod: Around May–June 2026
+projectMonth: 2026-05
 category: Software
 technologies: [Python]
 tags: [Tools]
@@ -92,8 +94,12 @@ draft: false
 Explain the project here.
 ```
 
-Use the entry's publication date for `date`; describe a month-only project start
-date in the body instead of inventing a day. `repoUrl` creates a visible source
+Use the entry's publication date for `date`. Projects also accept `projectPeriod`
+for a human-readable project timeline, including approximate ranges, and
+`projectMonth` (`YYYY-MM`) for ordering. Project pages, lists, and the city use
+that timeline instead of presenting the page publication date as a project date.
+When only GitHub timestamps are available, they are labeled as repository dates.
+`repoUrl` creates a visible source
 link and source-code metadata. The same entry supplies its collection preview,
 homepage/city listing, and sitemap URL; there is no second registry to update.
 
@@ -106,7 +112,11 @@ All entries require `title`, `summary`, and `date`.
   `publicationStatus`, such as `Preliminary report`.
 - Awards/certificates: also supply `issuer`. Use the award/issue date in `date`.
 - Images: put files in `public/images/` and use `cover: /images/example.jpg` or a
-  Markdown image with descriptive alternative text.
+  Markdown image with descriptive alternative text. `coverAlt` describes the
+  image and `coverCaption` identifies it as a screenshot, chart, illustration,
+  or certificate. Repository imports select source images while ignoring badges.
+  Entries without source art use a clearly captioned project illustration.
+  These images also appear on the homepage billboards and project previews.
 - Downloads: put a reviewed public document in `public/papers/` and link to
   `/papers/document.pdf` from Markdown. A local `docs/` file is not a download.
 
