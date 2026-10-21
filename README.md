@@ -2,7 +2,7 @@
 
 Personal website and digital laboratory, built with Astro, TypeScript, and MDX. Static output for Cloudflare Pages; no server adapter or runtime database is required.
 
-Live: <https://kazenoko.pages.dev>. See [Publishing Markdown](docs/publishing.md)
+Live: <https://ivan.wingit.tech> (Pages fallback: <https://kazenoko.pages.dev>). See [Publishing Markdown](docs/publishing.md)
 for the GitHub-to-Pages publishing flow and frontmatter examples. Public repository READMEs and publication folders are imported automatically.
 Extra content and overrides live under root `content/`; working documents under `docs/` are
 not published as website entries.

@@ -8,7 +8,7 @@ their publishing folders and the two existing Telos preliminary papers.
 For extra entries or curated summaries, add Markdown to **`content/` at the root
 of the portfolio repository**, commit, and push to `main`. GitHub validates the
 site and triggers a Cloudflare Pages build. Pages retrieves `portfolio/main`,
-builds it, and publishes generated HTML to <https://kazenoko.pages.dev>.
+builds it, and publishes generated HTML to <https://ivan.wingit.tech>.
 
 The workflow also checks and rebuilds every six hours (at minute 17 UTC), picking
 up changes and new repositories on your account. GitHub may delay scheduled runs.
@@ -178,7 +178,7 @@ sitemap entries. Project repository links are ordinary crawlable HTML links.
 Structured data associates the site with Ivan Samuel's public profiles and
 links projects to their source code.
 
-The sitemap is <https://kazenoko.pages.dev/sitemap.xml>, advertised by
+The sitemap is <https://ivan.wingit.tech/sitemap.xml>, advertised by
 `robots.txt`. Submit it in Google Search Console after verifying ownership of
 the site. Google controls whether and when pages or linked GitHub repositories
 are indexed; publishing a page or sitemap does not guarantee a search result.
@@ -186,3 +186,10 @@ are indexed; publishing a page or sitemap does not guarantee a search result.
 If a custom domain is connected later, change `site.url` and `site.domain` in
 `src/lib/site.ts`; Astro's canonicals, sitemap, RSS, and robots endpoint use that
 configured origin. Then review redirects and resubmit the sitemap.
+
+## Primary domain
+
+The primary site origin is `https://ivan.wingit.tech`, attached to the existing
+`kazenoko` Pages project. Its DNS CNAME points to `kazenoko.pages.dev`. Canonical
+URLs, sitemap, robots, RSS, and structured data use the primary origin in
+`src/lib/site.ts`. The Pages address remains available as a fallback.

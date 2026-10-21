@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-const origin = 'https://kazenoko.pages.dev';
+const origin = 'https://ivan.wingit.tech';
 const page = (path) => readFile(`dist/${path}/index.html`, 'utf8');
 
 test('plain Markdown produces linked project and award pages, including the certificates alias', async () => {
@@ -89,7 +89,7 @@ test('repository content is published alongside curated local content without du
   assert.equal(
     (
       sitemap.match(
-        /<loc>https:\/\/kazenoko.pages.dev\/projects\/prodo\/<\/loc>/g,
+        /<loc>https:\/\/ivan.wingit.tech\/projects\/prodo\/<\/loc>/g,
       ) ?? []
     ).length,
     1,

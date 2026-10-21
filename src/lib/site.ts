@@ -1,8 +1,8 @@
 export const site = {
   name: 'kazenoko',
   kanji: '風の子',
-  domain: 'kazenoko.pages.dev',
-  url: 'https://kazenoko.pages.dev',
+  domain: 'ivan.wingit.tech',
+  url: 'https://ivan.wingit.tech',
   author: 'Ivan Samuel',
   repository: 'https://github.com/kazenoko-git/portfolio',
   description:
