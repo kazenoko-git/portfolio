@@ -3299,6 +3299,25 @@ h3 {
 .score-mid { border-left: 5px solid #a77a2f; }
 .score-bad { border-left: 5px solid #a94f32; }
 .score-warn { border-left: 5px solid #5e587d; }
+.talos-scroll-ready [data-scroll-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 620ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 620ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.talos-scroll-ready [data-scroll-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.talos-scroll-ready .talos-figure.talos-decay .decay-line {
+  stroke-dashoffset: 1200;
+  animation: none;
+}
+.talos-scroll-ready .talos-figure.talos-decay.is-visible .decay-line {
+  animation: chart-draw 1.4s ease-out forwards;
+}
 @keyframes signal-flow {
   to { stroke-dashoffset: -34; }
 }
@@ -3307,6 +3326,11 @@ h3 {
   6% { fill: #df815e; }
 }
 @media (prefers-reduced-motion: reduce) {
+  .talos-scroll-ready [data-scroll-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
   .talos-article *,
   .talos-header * {
     animation-duration: 0.01ms !important;

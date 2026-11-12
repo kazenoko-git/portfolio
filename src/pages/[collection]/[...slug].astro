@@ -167,6 +167,44 @@ const structuredData = {
     </article>
   </div>
   <script>
+    const talosArticle = document.querySelector('.talos-article');
+    const reduceTalosMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (
+      talosArticle &&
+      !reduceTalosMotion.matches &&
+      'IntersectionObserver' in window
+    ) {
+      const revealTargets = talosArticle.querySelectorAll(
+        'h2, .talos-figure, .talos-equation, .score-card',
+      );
+      let scoreCardIndex = 0;
+      revealTargets.forEach((element) => {
+        element.setAttribute('data-scroll-reveal', '');
+        if (
+          element instanceof HTMLElement &&
+          element.classList.contains('score-card')
+        ) {
+          element.style.setProperty(
+            '--reveal-delay',
+            `${Math.min(scoreCardIndex * 65, 390)}ms`,
+          );
+          scoreCardIndex += 1;
+        }
+      });
+      talosArticle.classList.add('talos-scroll-ready');
+      const revealObserver = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -7% 0px' },
+      );
+      revealTargets.forEach((element) => revealObserver.observe(element));
+    }
     document.querySelectorAll('article :is(h2,h3)[id]').forEach((heading) => {
       const anchor = document.createElement('a');
       anchor.href = `#${heading.id}`;
