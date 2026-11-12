@@ -17,6 +17,8 @@ links:
     url: https://github.com/kazenoko-git/Talos/tree/talos_1/test
 ---
 
+import TalosScrollStory from '../../src/components/TalosScrollStory.astro';
+
 Talos 1 is a **16-neuron spiking reservoir** implemented in Verilog. It processes event streams using a fixed recurrent network and one shared arithmetic unit. The design began as a small neuromorphic hardware project: a way to learn what changes when a software idea has to fit into registers, clock cycles, wires, and a finite silicon budget.
 
 This report follows the signal from input to output, explains the neuron update rule, and examines what the test suite actually measured. The short version: the simulations show a working, stateful circuit and several toy readout tasks. They do not yet show a useful advantage over simple software, a physical speed or power result, or general skill at recognizing real-world signals. The technical terms are unpacked as we go.
@@ -27,41 +29,7 @@ This report follows the signal from input to output, explains the neuron update 
 
 ## Fast tour: what did I actually build?
 
-Talos 1 is a **16-neuron, recurrent, leaky integrate-and-fire reservoir**. In plain language, it is a small network of number-storing units that react to incoming events and to earlier activity:
-
-- **16 neurons:** sixteen little number buckets, each keeping an 8-bit signed value from −128 to +127.
-- **Integrate:** a new input can add to the number in a bucket.
-- **Leak:** the number slowly shrinks, so yesterday’s excitement eventually gets forgotten.
-- **Fire:** when the number reaches a threshold, the neuron emits a one-bit spike and resets its stored value to zero.
-- **Recurrent:** neurons can react to spikes from the previous step. A ripple can make more ripples.
-- **Reservoir:** the circuit makes a changing pattern; a separate, ordinary computer can learn to read that pattern.
-
-Talos is not a miniature brain or a complete classifier. It is a deliberately small pattern-making circuit. It does not train itself or contain the final task classifier. Its job is to turn an event stream into a state that a host computer may find easier to classify.
-
-<figure class="talos-figure talos-flow">
-  <svg viewBox="0 0 760 250" role="img" aria-labelledby="flow-title flow-desc">
-    <title id="flow-title">How an input travels through Talos</title>
-    <desc id="flow-desc">A microcontroller sends event bits over SPI. Talos updates sixteen neuron states and returns spikes and readable state values. A host-side readout can classify the result.</desc>
-    <defs><marker id="arrowhead" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9z" /></marker></defs>
-    <rect class="flow-host" x="18" y="64" width="156" height="118" rx="18" />
-    <text x="96" y="101" textAnchor="middle">HOST</text><text class="flow-small" x="96" y="129" textAnchor="middle">event bits in</text><text class="flow-small" x="96" y="151" textAnchor="middle">readout out</text>
-    <path class="flow-wire" d="M175 105h73" markerEnd="url(#arrowhead)"/><text class="flow-small" x="210" y="90" textAnchor="middle">SPI</text>
-    <rect class="flow-chip" x="258" y="36" width="244" height="174" rx="25" />
-    <text x="380" y="68" textAnchor="middle">TALOS 1</text>
-    <g class="flow-neurons"><circle cx="304" cy="105" r="15"/><circle cx="342" cy="105" r="15"/><circle cx="380" cy="105" r="15"/><circle cx="418" cy="105" r="15"/><circle cx="456" cy="105" r="15"/><circle cx="323" cy="151" r="15"/><circle cx="361" cy="151" r="15"/><circle cx="399" cy="151" r="15"/><circle cx="437" cy="151" r="15"/></g>
-    <path class="flow-wire" d="M503 105h78" markerEnd="url(#arrowhead)"/><text class="flow-small" x="542" y="90" textAnchor="middle">state</text>
-    <rect class="flow-host" x="589" y="64" width="154" height="118" rx="18" />
-    <text x="666" y="101" textAnchor="middle">READOUT</text><text class="flow-small" x="666" y="129" textAnchor="middle">“probably a</text><text class="flow-small" x="666" y="151" textAnchor="middle">forward wiggle”</text>
-    <path class="flow-feedback" d="M470 200 C442 238 318 239 291 201" markerEnd="url(#arrowhead)"/><text class="flow-small" x="381" y="238" textAnchor="middle">previous step’s spikes make ripples</text>
-  </svg>
-  <figcaption>The chip makes the changing state. A host-side readout interprets it. These are separate jobs, like a drummer and the person trying to recognize the song.</figcaption>
-</figure>
-
-### The “brain inspired” bit, with fewer dramatic robes
-
-In a software recurrent neural network, many operations can happen in parallel on a GPU. Talos 1 uses a much simpler fixed network. It has a ring-like pattern of excitatory and inhibitory connections, plus a longer-range connection five positions away. Connection signs are limited to −1, 0, or +1, all scaled by a shared setting. That means the circuit can add or subtract a chosen amount without a general-purpose multiplier.
-
-The topology is fixed in the RTL. You can adjust the common weight scale, threshold, leak mode, and external input bits; you cannot redraw the network through SPI. “Reservoir” describes the role this fixed network plays in the experiment, not a claim that it is a biologically accurate brain.
+<TalosScrollStory />
 
 Here is the little three-beat pattern used by the direction demo. The two classes contain the same three events and the same number of events. They arrive in the opposite order:
 
@@ -110,14 +78,6 @@ The leak choices are arithmetic right shifts: no leak, shift by 3, by 2, or by 1
 </figure>
 
 If the value reaches the threshold, Talos emits a spike and resets that neuron to zero. A spike is a one-bit event, like a brief digital pulse. The membrane value is different: it records the neuron’s current internal state. Talos exposes both, because keeping only the spikes can discard useful information.
-
-### One shared calculator, sixteen turns
-
-Here is the main area-saving trick: there are sixteen stored neuron values, but **only one LIF arithmetic unit**. A sequencer visits neuron 0, then 1, then 2 … then 15. One time-step therefore takes sixteen update cycles after it starts. It is a classroom calculator passed down a row: less hardware, more waiting.
-
-At the beginning of a step, Talos freezes the previous step’s spike vector. Every neuron uses that same snapshot while the new step is calculated. Without it, neuron 15 might see freshly updated spikes from neurons 0–14 while neuron 0 saw only the previous step. The result would depend on update order, rather than on the circuit’s intended step-by-step model.
-
-While the update is running, `busy` is high and another step trigger is ignored. The host should wait until `busy` clears before starting another step or treating the output vector as a completed result. Spike bits are updated as the sequencer visits neurons; read the final result after the step is done.
 
 ### The wire-in / wire-out mailbox
 

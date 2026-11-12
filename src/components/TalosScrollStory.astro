@@ -1,36 +1,282 @@
-<section
-  class="talos-story"
-  data-talos-story
-  aria-label="A scroll-linked view of the Talos 1 signal path"
->
-  <div class="talos-story-viewport">
-    <canvas data-talos-canvas hidden aria-hidden="true"></canvas>
-    <div class="talos-story-copy">
-      <p class="talos-story-kicker">TALOS 1 / SCROLL STUDY</p>
-      <p class="talos-story-step" data-story-step>01 / 05</p>
-      <h2 data-story-title>From event to evidence</h2>
-      <p data-story-description>
-        Scroll to follow an input through the sixteen-neuron reservoir and out
-        to the host-side benchmark.
-      </p>
-    </div>
-    <div class="talos-story-footer">
-      <span data-story-hint>Scroll to move through the signal path ↓</span>
-      <progress data-story-progress max="100" value="0" aria-label="Signal path progress"></progress>
-      <a href="#fast-tour-what-did-i-actually-build">Skip to the architecture ↓</a>
-    </div>
-  </div>
-  <ol class="talos-story-fallback">
-    <li><strong>Input bits arrive.</strong> Eight external bits can directly nudge neurons 0–7.</li>
-    <li><strong>One unit visits sixteen neurons.</strong> Every update uses the previous step’s frozen spike vector.</li>
-    <li><strong>State becomes a trace.</strong> The recorded impulse-decay values fall from 21 to an integer floor of 7.</li>
-    <li><strong>A host reads the state.</strong> A Python readout reached R² 0.945 on a repeated waveform in simulation.</li>
-    <li><strong>The evidence has limits.</strong> These are RTL simulations, not measurements from fabricated silicon.</li>
-  </ol>
-</section>
+---
+const neurons = Array.from({ length: 16 }, (_, i) => ({
+  x: 164 + (i % 4) * 49,
+  y: 146 + Math.floor(i / 4) * 46,
+}));
+---
 
+<div class="talos-architecture" data-talos-story>
+  <figure class="talos-architecture-diagram">
+    <svg
+      class="architecture-desktop"
+      viewBox="0 0 480 450"
+      role="img"
+      aria-labelledby="architecture-title architecture-desc"
+    >
+      <title id="architecture-title">Talos 1: input, sixteen stored states, one shared update unit, and host readout</title>
+      <desc id="architecture-desc">
+        Eight input bits arrive over SPI. Sixteen neurons store signed eight-bit
+        membrane values. A single arithmetic unit updates them in sequence using
+        a frozen snapshot of previous spikes. The host reads the completed state
+        and applies a separate learned readout.
+      </desc>
+      <defs>
+        <marker
+          id="talos-arrow"
+          markerWidth="7"
+          markerHeight="7"
+          refX="6"
+          refY="3.5"
+          orient="auto"
+        >
+          <path
+            d="M0 0L7 3.5L0 7"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.4"
+          />
+        </marker>
+      </defs>
+      <g class="architecture-block" data-block="0">
+        <rect x="18" y="21" width="116" height="61" rx="12" />
+        <text x="76" y="47">
+          HOST / SPI
+        </text>
+        <text class="diagram-small" x="76" y="66">
+          8 input bits
+        </text>
+      </g>
+      <path class="architecture-wire" d="M134 52H238V110" />
+      <path
+        class="architecture-signal"
+        data-input-signal
+        d="M134 52H238V110"
+        pathLength="100"
+      />
+      <rect
+        class="architecture-chip"
+        x="119"
+        y="105"
+        width="245"
+        height="251"
+        rx="20"
+      />
+      <text class="diagram-small" x="242" y="126">
+        TALOS 1 · 16 STORED STATES
+      </text>
+      <g class="architecture-recurrence" data-recurrence>
+        <path d="M164 146L213 192L262 238L311 284L164 284L213 238L262 192L311 146" />
+        <path d="M376 281Q418 190 376 148" marker-end="url(#talos-arrow)" />
+        <text
+          class="diagram-small"
+          x="408"
+          y="220"
+          transform="rotate(-90 408 220)"
+        >
+          previous spikes
+        </text>
+      </g>
+      {neurons.map((n, i) => (
+        <g class="architecture-neuron" data-neuron={i}>
+          <circle cx={n.x} cy={n.y} r="16" />
+          <text x={n.x} y={n.y + 4}>
+            {i}
+          </text>
+        </g>
+      ))}
+      <g class="architecture-cursor" data-scan-cursor style="display: none">
+        <rect x="143" y="125" width="42" height="42" rx="10" />
+      </g>
+      <g class="architecture-block" data-block="3">
+        <rect x="144" y="312" width="196" height="31" rx="8" />
+        <text x="242" y="332">
+          ONE SHARED LIF UNIT
+        </text>
+      </g>
+      <g class="architecture-block" data-block="2">
+        <rect x="18" y="164" width="83" height="99" rx="10" />
+        <text x="59" y="191">
+          FROZEN
+        </text>
+        <text x="59" y="209">
+          SPIKES
+        </text>
+        <text class="diagram-small" x="59" y="235">
+          last step
+        </text>
+      </g>
+      <path class="architecture-wire" d="M101 215H119M242 356V382" />
+      <g class="architecture-block" data-block="4">
+        <rect x="144" y="385" width="196" height="53" rx="12" />
+        <text x="242" y="406">
+          HOST READOUT
+        </text>
+        <text class="diagram-small" x="242" y="424">
+          state → prediction
+        </text>
+      </g>
+    </svg>
+    <svg
+      class="architecture-mobile"
+      viewBox="0 0 360 185"
+      role="img"
+      aria-label="Talos architecture: SPI input, sixteen neuron states, frozen previous spikes, one shared LIF unit, and host readout"
+    >
+      <g class="architecture-block" data-block="0">
+        <rect x="5" y="10" width="86" height="46" rx="8" />
+        <text x="48" y="30">
+          HOST / SPI
+        </text>
+        <text class="diagram-small" x="48" y="46">
+          8 input bits
+        </text>
+      </g>
+      <path class="architecture-wire" d="M91 33H111" />
+      <rect
+        class="architecture-chip"
+        x="112"
+        y="5"
+        width="241"
+        height="123"
+        rx="12"
+      />
+      <text x="232" y="23">
+        16 NEURON STATES
+      </text>
+      {neurons.map((_, i) => (
+        <g class="architecture-neuron" data-neuron={i}>
+          <circle
+            cx={133 + (i % 8) * 28}
+            cy={43 + Math.floor(i / 8) * 26}
+            r="10"
+          />
+          <text
+            class="diagram-small"
+            x={133 + (i % 8) * 28}
+            y={46 + Math.floor(i / 8) * 26}
+          >
+            {i}
+          </text>
+        </g>
+      ))}
+      <g class="architecture-block" data-block="3">
+        <rect x="125" y="91" width="215" height="26" rx="6" />
+        <text x="232" y="108">
+          ONE SHARED LIF UNIT
+        </text>
+      </g>
+      <g class="architecture-block" data-block="2">
+        <rect x="5" y="85" width="86" height="55" rx="8" />
+        <text x="48" y="105">
+          FROZEN
+        </text>
+        <text x="48" y="121">
+          SPIKES
+        </text>
+        <text class="diagram-small" x="48" y="134">
+          last step
+        </text>
+      </g>
+      <path class="architecture-wire" d="M91 111H112M232 128V148" />
+      <g class="architecture-block" data-block="4">
+        <rect x="112" y="150" width="241" height="29" rx="8" />
+        <text x="232" y="169">
+          HOST READOUT → PREDICTION
+        </text>
+      </g>
+    </svg>
+    <figcaption>
+      <span data-diagram-caption>
+        Input bits travel from the host to Talos over SPI.
+      </span>
+      <span class="diagram-note">
+        Architecture schematic · scroll follows the explanation
+      </span>
+    </figcaption>
+  </figure>
+  <div class="talos-architecture-text">
+    <section data-architecture-step="0">
+      <h3>1. Send an event</h3>
+      <p>
+        A host computer or microcontroller sends{' '}
+        <strong>eight input bits over SPI</strong>, a simple serial connection.
+        Each bit can directly nudge one of neurons 0–7. It is a tiny doorbell
+        panel: the bits say which bells rang, without saying what the pattern
+        means.
+      </p>
+    </section>
+    <section data-architecture-step="1">
+      <h3>2. Keep sixteen little memories</h3>
+      <p>
+        Each of the <strong>sixteen neurons</strong> stores an 8-bit signed
+        number, from −128 to +127. Incoming events add to it; a leak subtracts a
+        little. If the result reaches a threshold, the neuron emits a one-bit{' '}
+        <strong>spike</strong> and resets to zero. That is “leaky
+        integrate-and-fire,” or LIF. A number bucket with a leak and an overflow
+        bell.
+      </p>
+      <p>
+        The stored number is the <strong>membrane value</strong>. The spike is a
+        separate yes-or-no event. Talos exposes both: a bucket can contain
+        useful information even when its bell has stayed quiet.
+      </p>
+    </section>
+    <section data-architecture-step="2">
+      <h3>3. Let yesterday nudge today</h3>
+      <p>
+        The network is <strong>recurrent</strong>: spikes from the previous step
+        feed back into the next update. Its fixed, ring-like wiring includes
+        excitatory and inhibitory connections and a connection five positions
+        away. Connection signs are −1, 0, or +1, scaled by a shared setting. Add
+        or subtract; no general-purpose multiplier required.
+      </p>
+      <p>
+        At the start of each step, the circuit{' '}
+        <strong>freezes the previous spike vector</strong>. Every neuron reads
+        that same snapshot. Otherwise a neuron updated later could peek at this
+        step’s new spikes. That would make the answer depend on who got their
+        turn first.
+      </p>
+      <p>
+        You can adjust the common weight, threshold, leak, and input bits. The
+        wiring itself is fixed in the Verilog; SPI cannot redraw it.
+      </p>
+    </section>
+    <section data-architecture-step="3">
+      <h3>4. Pass the calculator</h3>
+      <p>
+        Sixteen stored values; <strong>one shared LIF arithmetic unit</strong>.
+        A sequencer visits neurons 0, 1, 2 … 15. One time-step takes sixteen
+        update cycles after it starts. Think of a calculator passed down a row:
+        less hardware, more waiting. The orange outline follows those turns as
+        you scroll.
+      </p>
+      <p>
+        During the update, <code>busy</code> is high and another step trigger is
+        ignored. The host waits until it clears before reading a completed
+        result. The spike bits change during the scan, so reading halfway
+        through would mix unfinished work with finished work.
+      </p>
+    </section>
+    <section data-architecture-step="4">
+      <h3>5. Read the pattern outside the chip</h3>
+      <p>
+        The host reads the final spikes and membrane values. A separate software{' '}
+        <strong>readout</strong> can learn to turn that changing state into a
+        prediction. The chip makes the pattern; the host interprets it. Drummer,
+        then song recognizer.
+      </p>
+      <p>
+        This is why the circuit is called a <strong>reservoir</strong>. It
+        supplies a changing internal state rather than a complete trained
+        classifier. It does not train itself or know what a gesture means. The
+        benchmark results later in this post evaluate simulations and host-side
+        readouts.
+      </p>
+    </section>
+  </div>
+</div>
 <script>
   import { startTalosStory } from '../scene/talos-story';
-
   startTalosStory();
 </script>

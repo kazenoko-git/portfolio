@@ -2820,7 +2820,9 @@ h3 {
   box-shadow: 2px 3px 0 var(--talos-ink);
   font: 11px var(--mono);
   text-decoration: none;
-  transition: transform 160ms ease, box-shadow 160ms ease;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
 }
 .talos-jump a:hover,
 .talos-jump a:focus-visible {
@@ -2890,8 +2892,12 @@ h3 {
   transform-origin: center;
   animation: neuron-boop 1.8s ease-in-out infinite;
 }
-.flow-neurons circle:nth-child(2n) { animation-delay: 180ms; }
-.flow-neurons circle:nth-child(3n) { animation-delay: 360ms; }
+.flow-neurons circle:nth-child(2n) {
+  animation-delay: 180ms;
+}
+.flow-neurons circle:nth-child(3n) {
+  animation-delay: 360ms;
+}
 .chart-heading {
   display: flex;
   justify-content: space-between;
@@ -2944,8 +2950,12 @@ h3 {
   transform-origin: center;
   animation: neuron-boop 1.8s ease-in-out infinite;
 }
-.raster-dot circle:nth-child(2n) { animation-delay: 220ms; }
-.raster-dot circle:nth-child(3n) { animation-delay: 400ms; }
+.raster-dot circle:nth-child(2n) {
+  animation-delay: 220ms;
+}
+.raster-dot circle:nth-child(3n) {
+  animation-delay: 400ms;
+}
 .decay-line {
   fill: none;
   stroke: #5146a0;
@@ -3039,10 +3049,18 @@ h3 {
   color: #625c4b;
   font: 10px/1.45 var(--mono);
 }
-.score-good { border-left: 7px solid #71915d; }
-.score-mid { border-left: 7px solid #cfad45; }
-.score-bad { border-left: 7px solid #d66a3d; }
-.score-warn { border-left: 7px solid #8f75c8; }
+.score-good {
+  border-left: 7px solid #71915d;
+}
+.score-mid {
+  border-left: 7px solid #cfad45;
+}
+.score-bad {
+  border-left: 7px solid #d66a3d;
+}
+.score-warn {
+  border-left: 7px solid #8f75c8;
+}
 .talos-article table {
   padding: 0 12px;
   background: #fff9e8;
@@ -3090,28 +3108,51 @@ h3 {
   animation: ripple-bob 1.2s ease-in-out infinite alternate;
 }
 @keyframes talos-arrow {
-  50% { transform: rotate(-5deg) translateY(-3px); }
+  50% {
+    transform: rotate(-5deg) translateY(-3px);
+  }
 }
 @keyframes talos-wave {
-  0%, 100% { stroke-dashoffset: 0; }
-  50% { stroke-dashoffset: 42; }
+  0%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dashoffset: 42;
+  }
 }
 @keyframes talos-dashes {
-  to { stroke-dashoffset: -30; }
+  to {
+    stroke-dashoffset: -30;
+  }
 }
 @keyframes neuron-boop {
-  0%, 100% { transform: scale(1); }
-  45% { transform: scale(1.13); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.13);
+  }
 }
 @keyframes chart-draw {
-  to { stroke-dashoffset: 0; }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 @keyframes chip-wiggle {
-  0%, 100% { transform: rotate(-5deg); }
-  50% { transform: rotate(6deg) translateY(-2px); }
+  0%,
+  100% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(6deg) translateY(-2px);
+  }
 }
 @keyframes ripple-bob {
-  to { transform: translateX(5px) scaleX(1.04); }
+  to {
+    transform: translateX(5px) scaleX(1.04);
+  }
 }
 @media (max-width: 760px) {
   .talos-header {
@@ -3273,38 +3314,78 @@ h3 {
   fill: #fbfaf5;
   animation: signal-pulse 1.9s ease-in-out infinite;
 }
-.flow-neurons circle:nth-child(2n) { animation-delay: 180ms; }
-.flow-neurons circle:nth-child(3n) { animation-delay: 360ms; }
+.flow-neurons circle:nth-child(2n) {
+  animation-delay: 180ms;
+}
+.flow-neurons circle:nth-child(3n) {
+  animation-delay: 360ms;
+}
 .raster-dot circle {
   fill: #a94f32;
   animation: signal-pulse 1.9s ease-in-out infinite;
 }
-.raster-dot circle:nth-child(2) { animation-delay: 260ms; }
-.raster-dot circle:nth-child(3) { animation-delay: 520ms; }
-.raster-dot circle:nth-child(4) { animation-delay: 780ms; }
-.raster-dot circle:nth-child(5) { animation-delay: 1040ms; }
-.raster-dot circle:nth-child(6) { animation-delay: 1300ms; }
-.decay-line { stroke: #49466f; }
-.decay-floor { stroke: #a94f32; }
-.decay-point { animation: signal-pulse 2.2s ease-in-out infinite; }
-.chart-label { fill: #303b40; }
-.chart-grid { stroke: #d5d1c7; }
+.raster-dot circle:nth-child(2) {
+  animation-delay: 260ms;
+}
+.raster-dot circle:nth-child(3) {
+  animation-delay: 520ms;
+}
+.raster-dot circle:nth-child(4) {
+  animation-delay: 780ms;
+}
+.raster-dot circle:nth-child(5) {
+  animation-delay: 1040ms;
+}
+.raster-dot circle:nth-child(6) {
+  animation-delay: 1300ms;
+}
+.decay-line {
+  stroke: #49466f;
+}
+.decay-floor {
+  stroke: #a94f32;
+}
+.decay-point {
+  animation: signal-pulse 2.2s ease-in-out infinite;
+}
+.chart-label {
+  fill: #303b40;
+}
+.chart-grid {
+  stroke: #d5d1c7;
+}
 .score-card {
   background: #fffefa;
   border: 1px solid #c9c4b7;
   border-radius: 4px;
   box-shadow: 1px 2px 0 #c5c0b4;
 }
-.score-good { border-left: 5px solid #55745d; }
-.score-mid { border-left: 5px solid #a77a2f; }
-.score-bad { border-left: 5px solid #a94f32; }
-.score-warn { border-left: 5px solid #5e587d; }
+.score-good {
+  border-left: 5px solid #55745d;
+}
+.score-mid {
+  border-left: 5px solid #a77a2f;
+}
+.score-bad {
+  border-left: 5px solid #a94f32;
+}
+.score-warn {
+  border-left: 5px solid #5e587d;
+}
 @keyframes signal-flow {
-  to { stroke-dashoffset: -34; }
+  to {
+    stroke-dashoffset: -34;
+  }
 }
 @keyframes signal-pulse {
-  0%, 14%, 100% { fill: #e7e3d9; }
-  6% { fill: #df815e; }
+  0%,
+  14%,
+  100% {
+    fill: #e7e3d9;
+  }
+  6% {
+    fill: #df815e;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .talos-article *,
@@ -3314,179 +3395,214 @@ h3 {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
-  .decay-line { stroke-dashoffset: 0; }
+  .decay-line {
+    stroke-dashoffset: 0;
+  }
 }
 
-/* Talos 1 scrollytelling follows the pinned, canvas-based homepage journey. */
-.talos-story {
+/* The architecture explanation itself drives a neighboring diagram. */
+.article-grid.talos-reading-layout {
+  display: block;
+  max-width: 1160px;
+}
+.talos-reading-layout > .toc {
+  display: none;
+}
+.talos-reading-layout .talos-article > :is(p, ul, ol, h2, h3, nav) {
+  max-width: 74ch;
+  margin-inline: auto;
+}
+.talos-architecture {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+  gap: clamp(24px, 4vw, 52px);
+  align-items: start;
   position: relative;
-  width: 100%;
-  color: #e7e8dc;
-  background: #0b100f;
-  border-block: 1px solid #26342f;
+  margin-block: 28px 40px;
 }
-.talos-story-viewport {
-  position: relative;
-  min-height: 440px;
-  padding: clamp(26px, 5vw, 64px);
-  overflow: hidden;
-  isolation: isolate;
-}
-.talos-story.is-live {
-  height: 430svh;
-}
-.talos-story.is-live .talos-story-viewport {
+.talos-architecture .talos-architecture-diagram {
   position: sticky;
-  top: 0;
-  height: 100svh;
-  min-height: 520px;
-  padding: 0;
+  top: 108px;
+  margin: 0;
+  padding: 12px;
+  min-width: 0;
+  background: #eae6f1;
+  border: 1.5px solid #59616c;
+  border-radius: 16px 12px 18px 12px;
+  box-shadow: 4px 5px 0 #c6c0ce;
 }
-.talos-story [data-talos-canvas] {
-  display: none;
-}
-.talos-story.is-live [data-talos-canvas] {
-  position: absolute;
-  inset: 0;
+.talos-architecture-diagram svg {
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
+  max-height: calc(100svh - 235px);
+  color: #30353e;
+  overflow: visible;
 }
-.talos-story-copy {
-  position: relative;
-  z-index: 1;
-  max-width: 660px;
+.talos-architecture-diagram text {
+  font: 600 12px var(--mono);
+  text-anchor: middle;
+  fill: #30353e;
 }
-.talos-story.is-live .talos-story-copy {
-  position: absolute;
-  top: clamp(88px, 13vh, 136px);
-  left: clamp(22px, 6vw, 84px);
-  width: min(54vw, 650px);
-  pointer-events: none;
+.talos-architecture-diagram .diagram-small {
+  font-size: 10px;
+  font-weight: 400;
 }
-.talos-story-kicker,
-.talos-story-step {
-  color: #e28b65;
-  font: 11px/1.5 var(--mono);
-  letter-spacing: 0.06em;
+.architecture-chip {
+  fill: #f7f4ec;
+  stroke: #59616c;
+  stroke-width: 2;
 }
-.talos-story-step {
-  margin: 18px 0 8px;
-  color: #93a99a;
+.architecture-block rect {
+  fill: #f7f4ec;
+  stroke: #59616c;
+  stroke-width: 1.5;
 }
-.talos-story-copy h2 {
-  max-width: 13ch;
-  margin: 0 0 12px;
-  color: #e7e8dc;
-  font-size: clamp(28px, 4.6vw, 56px);
-  line-height: 1.03;
-  letter-spacing: -0.045em;
+.architecture-block.is-active rect {
+  fill: #eed6bb;
+  stroke: #984b2d;
+  stroke-width: 2.5;
 }
-.talos-story-copy > p:last-child {
-  max-width: 54ch;
-  margin: 0;
-  color: #adbaae;
-  font-size: clamp(13px, 1.5vw, 17px);
-  line-height: 1.6;
+.architecture-neuron circle {
+  fill: #d4cde4;
+  stroke: #59616c;
+  stroke-width: 1.5;
 }
-.talos-story-footer {
-  display: none;
+.architecture-neuron.is-active circle {
+  fill: #e9bc94;
+  stroke: #984b2d;
+  stroke-width: 2;
 }
-.talos-story.is-live .talos-story-footer {
-  position: absolute;
-  z-index: 2;
-  right: clamp(22px, 6vw, 84px);
-  bottom: max(20px, env(safe-area-inset-bottom));
-  left: clamp(22px, 6vw, 84px);
-  display: grid;
-  grid-template-columns: 1fr minmax(100px, 190px) auto;
-  align-items: center;
-  gap: 22px;
-  color: #b4c2b5;
-  font: 11px var(--mono);
+.architecture-wire {
+  fill: none;
+  stroke: #59616c;
+  stroke-width: 2;
+  marker-end: url(#talos-arrow);
 }
-.talos-story-footer progress {
-  width: 100%;
-  height: 3px;
-  accent-color: #e87950;
+.architecture-signal {
+  fill: none;
+  stroke: #a6502b;
+  stroke-width: 5;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
 }
-.talos-story-footer a {
-  color: #e7e8dc;
-  text-decoration-color: #e87950;
-  text-underline-offset: 4px;
+.architecture-recurrence path {
+  fill: none;
+  stroke: #b5adbf;
+  stroke-width: 1.5;
 }
-.talos-story-fallback {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 14px;
-  margin: 0;
-  padding: 0 clamp(26px, 5vw, 64px) 30px;
-  list-style: none;
+.architecture-recurrence.is-active path {
+  stroke: #984b2d;
+  stroke-width: 2.5;
 }
-.talos-story-fallback li {
+.architecture-cursor rect {
+  fill: none;
+  stroke: #a6502b;
+  stroke-width: 3;
+}
+.talos-architecture-diagram figcaption {
+  margin: 10px 0 0;
+  padding: 10px 4px 2px;
+  border-top: 1px solid #c4bdcf;
+  font: 14px/1.5 var(--sans);
+  text-align: left;
+}
+.diagram-note {
+  display: block;
+  margin-top: 7px;
+  font-size: 11px;
+}
+.talos-architecture-text section {
+  padding: 0 0 28px;
+  scroll-margin-top: 120px;
+}
+.talos-architecture-text section + section {
   padding-top: 12px;
-  color: #aebbb0;
-  border-top: 1px solid #52675d;
-  font-size: 12px;
-  line-height: 1.55;
+  border-top: 1px solid #d1cbbf;
 }
-.talos-story-fallback strong {
-  display: block;
-  margin-bottom: 6px;
-  color: #e7e8dc;
+.talos-architecture-text h3 {
+  margin: 0 0 12px;
+  font-size: 23px;
+  line-height: 1.25;
 }
-.talos-story.is-live .talos-story-fallback {
-  display: none;
+.talos-architecture-text p {
+  margin: 0 0 16px;
+  font-size: 17px;
+  line-height: 1.8;
 }
-.talos-story.is-static .talos-story-viewport {
-  min-height: 0;
-  padding-bottom: 20px;
-}
-.talos-story.is-static .talos-story-footer {
-  display: none;
-}
-@media (max-width: 760px) {
-  .talos-story.is-live .talos-story-copy {
-    top: calc(84px + env(safe-area-inset-top));
-    right: 20px;
-    left: 20px;
-    width: auto;
+@media (max-width: 700px) {
+  .talos-architecture {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
   }
-  .talos-story-copy h2 {
-    max-width: 18ch;
-    font-size: clamp(27px, 8vw, 39px);
+  .talos-architecture .talos-architecture-diagram {
+    top: 72px;
+    z-index: 3;
+    padding: 8px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(85px, 0.72fr);
+    gap: 10px;
+    align-items: center;
   }
-  .talos-story-copy > p:last-child {
-    max-width: 42ch;
-    font-size: 13px;
+  .talos-architecture-diagram svg {
+    height: 185px;
+    max-height: 28svh;
   }
-  .talos-story.is-live .talos-story-footer {
-    grid-template-columns: 1fr auto;
-    gap: 10px 14px;
+  .talos-architecture-diagram figcaption {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 12px;
+  }
+  .talos-architecture-diagram .diagram-note {
     font-size: 10px;
   }
-  .talos-story-footer progress {
-    grid-column: 1 / -1;
-    grid-row: 2;
-  }
-  .talos-story-fallback {
-    grid-template-columns: 1fr 1fr;
+  .talos-architecture-text section {
+    scroll-margin-top: 320px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .talos-story.is-live {
-    height: auto;
-  }
-  .talos-story.is-live .talos-story-viewport {
-    position: relative;
-    height: auto;
-    min-height: 0;
-  }
-  .talos-story.is-live [data-talos-canvas] {
+  .architecture-signal,
+  .architecture-cursor {
     display: none;
   }
-  .talos-story.is-live .talos-story-footer,
-  .talos-story.is-live .talos-story-fallback {
+}
+@media print {
+  .talos-architecture {
+    display: block;
+  }
+  .talos-architecture .talos-architecture-diagram {
+    position: static;
+    max-width: 400px;
+  }
+}
+/* Sticky figures must follow the article, rather than a clipped ancestor. */
+.talos-reading-layout .talos-article {
+  overflow: visible;
+}
+
+.talos-architecture-diagram .architecture-mobile {
+  display: none;
+}
+@media (max-width: 700px) {
+  .talos-architecture .talos-architecture-diagram {
+    display: block;
+  }
+  .talos-architecture-diagram .architecture-desktop {
     display: none;
+  }
+  .talos-architecture-diagram .architecture-mobile {
+    display: block;
+    height: auto;
+    max-height: 24svh;
+  }
+  .talos-architecture-diagram figcaption {
+    padding-top: 8px;
+  }
+  .talos-architecture-diagram .diagram-note {
+    display: none;
+  }
+  .talos-architecture[data-stage='3'] .architecture-neuron.is-active circle {
+    stroke-width: 4;
   }
 }
