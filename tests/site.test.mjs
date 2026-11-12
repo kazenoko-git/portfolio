@@ -38,19 +38,15 @@ test('all generated local links resolve, including heading anchors', async () =>
     }
   }
 });
-test('editorial draft is marked noindex and excluded from syndication', async () => {
-  const draft = await readFile(
+test('published Talos report is indexable and included in syndication', async () => {
+  const report = await readFile(
     join(root, 'writing/neuromorphic-npu/index.html'),
     'utf8',
   );
-  assert.match(draft, /name="robots" content="noindex, nofollow"/);
-  assert.match(draft, /Unpublished draft outline/);
+  assert.doesNotMatch(report, /name="robots" content="noindex, nofollow"/);
+  assert.match(report, /A tiny chip, sixteen neurons, and some very big questions/);
   for (const file of ['rss.xml', 'sitemap.xml'])
-    assert.ok(
-      !(await readFile(join(root, file), 'utf8')).includes(
-        '/writing/neuromorphic-npu',
-      ),
-    );
+    assert.ok((await readFile(join(root, file), 'utf8')).includes('/writing/neuromorphic-npu'));
 });
 
 test('homepage has one profile and a navigation containing only section links', async () => {

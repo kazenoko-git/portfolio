@@ -60,13 +60,13 @@ test('canonical URLs, sitemap discovery, and structured data describe the produc
   );
 });
 
-test('draft articles do not emit publishable article structured data', async () => {
+test('published Talos report emits BlogPosting structured data', async () => {
   const html = await page('writing/neuromorphic-npu');
   const match = html.match(
     /<script type="application\/ld\+json">([\s\S]*?)<\/script>/,
   );
   const data = JSON.parse(match[1]);
-  assert.ok(!data['@graph'].some((item) => item['@type'] === 'BlogPosting'));
+  assert.ok(data['@graph'].some((item) => item['@type'] === 'BlogPosting'));
 });
 
 test('repository content is published alongside curated local content without duplicate project pages', async () => {
