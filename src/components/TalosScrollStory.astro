@@ -1,0 +1,36 @@
+<section
+  class="talos-story"
+  data-talos-story
+  aria-label="A scroll-linked view of the Talos 1 signal path"
+>
+  <div class="talos-story-viewport">
+    <canvas data-talos-canvas hidden aria-hidden="true"></canvas>
+    <div class="talos-story-copy">
+      <p class="talos-story-kicker">TALOS 1 / SCROLL STUDY</p>
+      <p class="talos-story-step" data-story-step>01 / 05</p>
+      <h2 data-story-title>From event to evidence</h2>
+      <p data-story-description>
+        Scroll to follow an input through the sixteen-neuron reservoir and out
+        to the host-side benchmark.
+      </p>
+    </div>
+    <div class="talos-story-footer">
+      <span data-story-hint>Scroll to move through the signal path ↓</span>
+      <progress data-story-progress max="100" value="0" aria-label="Signal path progress"></progress>
+      <a href="#fast-tour-what-did-i-actually-build">Skip to the architecture ↓</a>
+    </div>
+  </div>
+  <ol class="talos-story-fallback">
+    <li><strong>Input bits arrive.</strong> Eight external bits can directly nudge neurons 0–7.</li>
+    <li><strong>One unit visits sixteen neurons.</strong> Every update uses the previous step’s frozen spike vector.</li>
+    <li><strong>State becomes a trace.</strong> The recorded impulse-decay values fall from 21 to an integer floor of 7.</li>
+    <li><strong>A host reads the state.</strong> A Python readout reached R² 0.945 on a repeated waveform in simulation.</li>
+    <li><strong>The evidence has limits.</strong> These are RTL simulations, not measurements from fabricated silicon.</li>
+  </ol>
+</section>
+
+<script>
+  import { startTalosStory } from '../scene/talos-story';
+
+  startTalosStory();
+</script>

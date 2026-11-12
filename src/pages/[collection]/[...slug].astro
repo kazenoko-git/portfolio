@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import { readingTime } from '../../lib/content';
 import { entryDate, entryVisual } from '../../lib/presentation';
 import ProjectImage from '../../components/ProjectImage.astro';
+import TalosScrollStory from '../../components/TalosScrollStory.astro';
 import { site } from '../../lib/site';
 export async function getStaticPaths() {
   const collections = [
@@ -78,9 +79,6 @@ const structuredData = {
   structuredData={structuredData}
   article
 >
-  {entry.id === 'neuromorphic-npu' && (
-    <div class="talos-scroll-progress" aria-hidden="true" />
-  )}
   <div class="wrap article-top">
     <a href={`/${entry.collection}`} class="mono back-link">
       ← All {entry.collection}
@@ -114,6 +112,7 @@ const structuredData = {
   <div class:list={['wrap article-art', { 'talos-cover': entry.id === 'neuromorphic-npu' }]}>
     <ProjectImage entry={entry} hero />
   </div>
+  {entry.id === 'neuromorphic-npu' && <TalosScrollStory />}
   <div class="wrap article-grid">
     <aside class="toc">
       <p class="eyebrow">On this page</p>
@@ -170,82 +169,6 @@ const structuredData = {
     </article>
   </div>
   <script>
-    const talosArticle = document.querySelector('.talos-article');
-    const reduceTalosMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (talosArticle && !reduceTalosMotion.matches) {
-      const revealTargets = talosArticle.querySelectorAll(
-        'h2, .talos-figure, .talos-equation, .score-card',
-      );
-      let scoreCardIndex = 0;
-      const scrollTargets = Array.from(revealTargets, (target) => {
-        const element = target as HTMLElement;
-        element.setAttribute('data-scroll-reveal', '');
-        const scoreCard = element.classList.contains('score-card');
-        const stagger = scoreCard ? scoreCardIndex++ * 0.018 : 0;
-        return { element, stagger };
-      });
-      talosArticle.classList.add('talos-scroll-js');
-      let scrollFrame = 0;
-      const updateTalosScroll = () => {
-        if (scrollFrame) return;
-        scrollFrame = requestAnimationFrame(() => {
-          const viewportHeight = window.innerHeight || 1;
-          const maxScroll =
-            document.documentElement.scrollHeight - viewportHeight;
-          document.documentElement.style.setProperty(
-            '--talos-reading-progress',
-            String(
-              maxScroll > 0
-                ? Math.max(0, Math.min(1, window.scrollY / maxScroll))
-                : 0,
-            ),
-          );
-          const measurements = scrollTargets.map((target) => ({
-            ...target,
-            rect: target.element.getBoundingClientRect(),
-            previousY:
-              Number.parseFloat(
-                target.element.style.getPropertyValue('--scroll-y'),
-              ) || 0,
-            previousScale:
-              Number.parseFloat(
-                target.element.style.getPropertyValue('--scroll-scale'),
-              ) || 1,
-          }));
-          measurements.forEach(
-            ({ element, stagger, rect, previousY, previousScale }) => {
-              const clamp = (value: number) =>
-                Math.max(0, Math.min(1, value));
-              const travel = clamp(
-                (viewportHeight - (rect.top - previousY)) /
-                  (viewportHeight + rect.height / previousScale) +
-                  stagger,
-              );
-              const entering = clamp(travel / 0.2);
-              const leaving = clamp((1 - travel) / 0.2);
-              const visibility = Math.min(entering, leaving);
-              const y = (1 - entering) * 52 - (1 - leaving) * 42;
-              const scale = 0.985 + visibility * 0.015;
-              element.style.setProperty(
-                '--scroll-opacity',
-                visibility.toFixed(3),
-              );
-              element.style.setProperty('--scroll-y', `${y.toFixed(1)}px`);
-              element.style.setProperty('--scroll-scale', scale.toFixed(3));
-              if (element.classList.contains('talos-decay'))
-                element.style.setProperty(
-                  '--decay-dash',
-                  (1200 * (1 - entering)).toFixed(1),
-                );
-            },
-          );
-          scrollFrame = 0;
-        });
-      };
-      window.addEventListener('scroll', updateTalosScroll, { passive: true });
-      window.addEventListener('resize', updateTalosScroll, { passive: true });
-      updateTalosScroll();
-    }
     document.querySelectorAll('article :is(h2,h3)[id]').forEach((heading) => {
       const anchor = document.createElement('a');
       anchor.href = `#${heading.id}`;
