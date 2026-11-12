@@ -1,6 +1,6 @@
 ---
 title: Neuromorphic NPU
-summary: A first neuromorphic NPU design for Hack Club ASIC. An exploration of computation at the hardware level.
+summary: Talos 1 is a tiny 16-neuron spiking reservoir: a first hardware experiment in temporal patterns, fixed-point arithmetic, and making silicon do one carefully chosen job.
 date: 2026-10-17
 projectPeriod: October 2026–present
 projectMonth: 2026-10
@@ -17,21 +17,20 @@ featuredOrder: 1
 
 What does it take to move an idea about computation into silicon?
 
-This project follows a first neuromorphic NPU design for Hack Club ASIC. This page will collect the motivation, architecture, implementation decisions, and verification evidence as they become ready to share.
+This project began with Talos 1: a sixteen-neuron spiking reservoir built to learn how a temporal computing idea becomes real RTL. Its completed design report explains the circuit, the simulation evidence, and the limits of the toy benchmarks.
 
 ## Current work
 
-The design report is being prepared. The repository documentation below tracks the Talos 2 branch; the longer writeup will connect the design decisions to verification evidence.
+The report is specifically about **Talos 1**, the small time-multiplexed design and FPGA-board learning stage. Talos 2 is a separate follow-on design, not the chip described in the report.
 
-[Read the report outline →](/writing/neuromorphic-npu)
+[Read the Talos 1 report →](/writing/neuromorphic-npu)
 
 ## What will be documented
 
-- The target workload and why it calls for dedicated hardware.
-- The numerical representation and the contract between the reference model and RTL.
-- The datapath, memory, control, and communication interfaces.
-- The verification approach, measured results, and remaining limitations.
+- Talos 1's neuron state, fixed recurrent connections, and shared arithmetic unit.
+- Its SPI controls and what a host can inspect.
+- What the simulation benchmarks establish, where they take shortcuts, and what should be tested next.
 
 ## Evidence and sources
 
-[Talos source repository](https://github.com/kazenoko-git/Talos/tree/talos_2). The imported documentation below reflects the repository's current descriptions and limitations.
+[Talos 1 source branch](https://github.com/kazenoko-git/Talos/tree/talos_1). The repository documentation below follows Talos 2 and is a separate, ongoing design. It should not be read as the specification or results for Talos 1.

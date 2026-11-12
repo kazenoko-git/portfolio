@@ -83,7 +83,7 @@ const structuredData = {
       ← All {entry.collection}
     </a>
   </div>
-  <header class="wrap article-header">
+  <header class:list={['wrap article-header', { 'talos-header': entry.id === 'neuromorphic-npu' }]}>
     <p class="eyebrow">{entry.data.tags.join(' / ')}</p>
     <h1>{entry.data.title}</h1>
     <p>{entry.data.summary}</p>
@@ -108,7 +108,7 @@ const structuredData = {
       </div>
     )}
   </header>
-  <div class="wrap article-art">
+  <div class:list={['wrap article-art', { 'talos-cover': entry.id === 'neuromorphic-npu' }]}>
     <ProjectImage entry={entry} hero />
   </div>
   <div class="wrap article-grid">
@@ -125,7 +125,7 @@ const structuredData = {
         Back to top ↑
       </a>
     </aside>
-    <article class="prose">
+    <article class:list={['prose', { 'talos-article': entry.id === 'neuromorphic-npu' }]}>
       {entry.data.source && (
         <p class="source-notice">
           Imported repository documentation. Claims and project status reflect

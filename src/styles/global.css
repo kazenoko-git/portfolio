@@ -2665,3 +2665,494 @@ h3 {
     font-size: 13px;
   }
 }
+
+/* Talos 1: butter-yellow paper, lavender chip, black marker ink. */
+.talos-header {
+  position: relative;
+  padding: 52px clamp(22px, 5vw, 70px) 38px;
+  margin-top: 18px;
+  background: #ecd18c;
+  border: 2px solid #25251f;
+  border-radius: 8px 30px 9px 26px;
+  box-shadow: 9px 10px 0 #25251f;
+}
+.talos-header h1 {
+  max-width: 900px;
+  font-family: var(--mono);
+  font-weight: 700;
+  letter-spacing: -0.075em;
+  line-height: 0.98;
+}
+.talos-header .eyebrow,
+.talos-header > p:not(.eyebrow),
+.talos-header .article-meta {
+  color: #25251f;
+}
+.talos-header > p:not(.eyebrow) {
+  max-width: 60ch;
+}
+.talos-cover {
+  padding-top: 30px;
+}
+.talos-cover .project-image-frame {
+  border: 2px solid #25251f;
+  border-radius: 20px 7px 24px 10px;
+  box-shadow: 7px 8px 0 #25251f;
+  overflow: hidden;
+}
+.talos-cover figcaption {
+  color: #25251f;
+}
+.talos-article {
+  --talos-ink: #25251f;
+  --talos-paper: #f5f0d8;
+  --talos-yellow: #ecd18c;
+  --talos-lilac: #cdc6f1;
+  color: var(--talos-ink);
+  padding: clamp(20px, 4vw, 46px);
+  background: var(--talos-paper);
+  border: 2px solid var(--talos-ink);
+  border-radius: 10px 26px 12px 24px;
+  box-shadow: 9px 10px 0 var(--talos-ink);
+  overflow: hidden;
+}
+.talos-article h2,
+.talos-article h3 {
+  color: var(--talos-ink);
+  font-family: var(--mono);
+  letter-spacing: -0.055em;
+}
+.talos-article h2 {
+  padding: 12px 16px 13px;
+  margin-left: -16px;
+  margin-right: -16px;
+  background: var(--talos-yellow);
+  border: 2px solid var(--talos-ink);
+  border-radius: 8px 18px 7px 14px;
+  box-shadow: 4px 4px 0 var(--talos-ink);
+}
+.talos-article p,
+.talos-article li,
+.talos-article td {
+  color: #353329;
+}
+.talos-article strong {
+  color: var(--talos-ink);
+}
+.talos-article a {
+  color: #4a3d93;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+.talos-article blockquote {
+  background: #fff9e8;
+  border: 2px solid var(--talos-ink);
+  border-left-width: 8px;
+  border-radius: 7px 16px 7px 12px;
+}
+.talos-sticker {
+  margin: 4px 0 30px;
+  padding: clamp(8px, 3vw, 22px);
+  background: var(--talos-yellow);
+  border: 2px solid var(--talos-ink);
+  border-radius: 25px 8px 21px 9px;
+  box-shadow: 6px 7px 0 var(--talos-ink);
+}
+.talos-sticker svg {
+  display: block;
+  width: min(100%, 760px);
+  margin: auto;
+  overflow: visible;
+}
+.talos-sticker svg path,
+.talos-sticker svg rect,
+.talos-sticker svg circle {
+  vector-effect: non-scaling-stroke;
+}
+.chip-arrow,
+.pins,
+.chip-wave,
+.chip-eye {
+  fill: none;
+  stroke: var(--talos-ink);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.chip-arrow {
+  animation: talos-arrow 2.8s ease-in-out infinite;
+  transform-origin: 120px 80px;
+}
+.chip-shell {
+  fill: var(--talos-lilac);
+  stroke: var(--talos-ink);
+  stroke-width: 5;
+}
+.chip-screen {
+  fill: var(--talos-paper);
+  stroke: var(--talos-ink);
+  stroke-width: 4;
+}
+.chip-wave {
+  stroke-dasharray: 180;
+  stroke-dashoffset: 0;
+  animation: talos-wave 3s ease-in-out infinite;
+}
+.chip-dot {
+  fill: var(--talos-ink);
+}
+.scribble {
+  fill: var(--talos-ink);
+  font: 20px var(--mono);
+}
+.talos-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 25px 0 40px;
+}
+.talos-jump a {
+  padding: 6px 12px;
+  color: var(--talos-ink);
+  background: var(--talos-lilac);
+  border: 2px solid var(--talos-ink);
+  border-radius: 999px;
+  box-shadow: 2px 3px 0 var(--talos-ink);
+  font: 11px var(--mono);
+  text-decoration: none;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+.talos-jump a:hover,
+.talos-jump a:focus-visible {
+  transform: translate(2px, 3px) rotate(-1deg);
+  box-shadow: 0 0 0 var(--talos-ink);
+}
+.talos-figure {
+  position: relative;
+  margin: 35px 0 40px;
+  padding: clamp(12px, 2.5vw, 24px);
+  background: #fff9e8;
+  border: 2px solid var(--talos-ink);
+  border-radius: 8px 21px 9px 17px;
+  box-shadow: 5px 6px 0 var(--talos-ink);
+}
+.talos-figure svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.talos-figure figcaption {
+  margin-top: 15px;
+  padding-top: 12px;
+  border-top: 1px dashed #746e5c;
+  color: #56503f;
+  font: 11px/1.65 var(--mono);
+}
+.flow-host {
+  fill: var(--talos-yellow);
+  stroke: var(--talos-ink);
+  stroke-width: 3;
+}
+.flow-chip {
+  fill: var(--talos-lilac);
+  stroke: var(--talos-ink);
+  stroke-width: 4;
+}
+.flow-wire,
+.flow-feedback {
+  fill: none;
+  stroke: var(--talos-ink);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.flow-feedback {
+  stroke-dasharray: 7 8;
+  animation: talos-dashes 1s linear infinite;
+}
+.talos-flow marker path {
+  fill: var(--talos-ink);
+}
+.talos-flow text {
+  fill: var(--talos-ink);
+  font: bold 16px var(--mono);
+}
+.talos-flow .flow-small {
+  font-size: 11px;
+  font-weight: 400;
+}
+.flow-neurons circle {
+  fill: #fff9e8;
+  stroke: var(--talos-ink);
+  stroke-width: 3;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: neuron-boop 1.8s ease-in-out infinite;
+}
+.flow-neurons circle:nth-child(2n) { animation-delay: 180ms; }
+.flow-neurons circle:nth-child(3n) { animation-delay: 360ms; }
+.chart-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 12px;
+  color: var(--talos-ink);
+  font: 10px/1.5 var(--mono);
+  text-transform: uppercase;
+}
+.chart-heading span:first-child {
+  font-weight: 800;
+}
+.chart-heading span:last-child {
+  text-align: right;
+  color: #69624f;
+}
+.chart-grid {
+  fill: none;
+  stroke: #d8d0b8;
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+}
+.chart-axis {
+  fill: none;
+  stroke: var(--talos-ink);
+  stroke-width: 2;
+}
+.chart-label {
+  fill: #494435;
+  font: 11px var(--mono);
+}
+.raster-title,
+.raster-label,
+.raster-class {
+  fill: var(--talos-ink);
+  font: 11px var(--mono);
+}
+.raster-title,
+.raster-class {
+  font-weight: 800;
+}
+.raster-class.reverse {
+  fill: #5146a0;
+}
+.raster-dot circle {
+  fill: #d66a3d;
+  stroke: var(--talos-ink);
+  stroke-width: 3;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: neuron-boop 1.8s ease-in-out infinite;
+}
+.raster-dot circle:nth-child(2n) { animation-delay: 220ms; }
+.raster-dot circle:nth-child(3n) { animation-delay: 400ms; }
+.decay-line {
+  fill: none;
+  stroke: #5146a0;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  animation: chart-draw 2.4s 200ms ease-out forwards;
+}
+.decay-floor {
+  fill: none;
+  stroke: #d66a3d;
+  stroke-width: 3;
+  stroke-dasharray: 5 6;
+}
+.decay-point {
+  fill: var(--talos-yellow);
+  stroke: var(--talos-ink);
+  stroke-width: 2;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: neuron-boop 1.8s ease-in-out infinite;
+}
+.chart-callout {
+  fill: none;
+  stroke: #d66a3d;
+  stroke-width: 2;
+}
+.talos-equation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 25px 0;
+  padding: 20px 15px 15px;
+  background: var(--talos-lilac);
+  border: 2px solid var(--talos-ink);
+  border-radius: 20px 8px 16px 9px;
+  box-shadow: 4px 5px 0 var(--talos-ink);
+  color: var(--talos-ink);
+  font: 13px var(--mono);
+}
+.talos-equation > span:not(.equation-foot) {
+  padding: 7px 9px;
+  background: var(--talos-paper);
+  border: 1px solid var(--talos-ink);
+  border-radius: 8px;
+}
+.talos-equation b {
+  font-size: 18px;
+}
+.talos-equation .equation-foot {
+  flex-basis: 100%;
+  text-align: center;
+  font-size: 11px;
+}
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.score-card {
+  display: grid;
+  grid-template-columns: minmax(90px, 0.8fr) 1.2fr;
+  align-items: center;
+  gap: 2px 12px;
+  min-height: 78px;
+  padding: 10px 13px;
+  background: #fffdf4;
+  border: 2px solid var(--talos-ink);
+  border-radius: 7px 15px 8px 12px;
+  box-shadow: 2px 3px 0 var(--talos-ink);
+  transition: transform 180ms ease;
+}
+.score-card:hover {
+  transform: translateY(-3px) rotate(-0.5deg);
+}
+.score-card b {
+  grid-row: span 2;
+  color: var(--talos-ink);
+  font: 800 clamp(16px, 2vw, 22px)/1 var(--mono);
+}
+.score-card span {
+  color: var(--talos-ink);
+  font: bold 10px var(--mono);
+  text-transform: uppercase;
+}
+.score-card small {
+  color: #625c4b;
+  font: 10px/1.45 var(--mono);
+}
+.score-good { border-left: 7px solid #71915d; }
+.score-mid { border-left: 7px solid #cfad45; }
+.score-bad { border-left: 7px solid #d66a3d; }
+.score-warn { border-left: 7px solid #8f75c8; }
+.talos-article table {
+  padding: 0 12px;
+  background: #fff9e8;
+  border: 2px solid var(--talos-ink);
+  border-radius: 12px;
+  box-shadow: 4px 5px 0 var(--talos-ink);
+}
+.talos-article td,
+.talos-article th {
+  min-width: 130px;
+  border-color: #d8d0b8;
+}
+.talos-article th {
+  color: #4a3d93;
+}
+.talos-goodbye {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 38px 0 48px;
+  padding: 18px;
+  background: var(--talos-yellow);
+  border: 2px solid var(--talos-ink);
+  border-radius: 10px 24px 9px 20px;
+  box-shadow: 4px 5px 0 var(--talos-ink);
+  color: var(--talos-ink);
+  font: 12px var(--mono);
+  text-align: center;
+}
+.goodbye-chip {
+  display: inline-grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  background: var(--talos-lilac);
+  border: 2px solid var(--talos-ink);
+  border-radius: 9px;
+  animation: chip-wiggle 1.4s ease-in-out infinite;
+}
+.goodbye-ripple {
+  display: block;
+  flex-basis: 100%;
+  animation: ripple-bob 1.2s ease-in-out infinite alternate;
+}
+@keyframes talos-arrow {
+  50% { transform: rotate(-5deg) translateY(-3px); }
+}
+@keyframes talos-wave {
+  0%, 100% { stroke-dashoffset: 0; }
+  50% { stroke-dashoffset: 42; }
+}
+@keyframes talos-dashes {
+  to { stroke-dashoffset: -30; }
+}
+@keyframes neuron-boop {
+  0%, 100% { transform: scale(1); }
+  45% { transform: scale(1.13); }
+}
+@keyframes chart-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes chip-wiggle {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(6deg) translateY(-2px); }
+}
+@keyframes ripple-bob {
+  to { transform: translateX(5px) scaleX(1.04); }
+}
+@media (max-width: 760px) {
+  .talos-header {
+    padding: 36px 22px 28px;
+  }
+  .talos-article {
+    padding: 19px;
+    box-shadow: 5px 6px 0 var(--talos-ink);
+  }
+  .talos-article h2 {
+    font-size: 26px;
+    margin-left: -7px;
+    margin-right: -7px;
+  }
+  .chart-heading {
+    flex-direction: column;
+    gap: 3px;
+  }
+  .chart-heading span:last-child {
+    text-align: left;
+  }
+  .score-grid {
+    grid-template-columns: 1fr;
+  }
+  .score-card {
+    grid-template-columns: 110px 1fr;
+  }
+  .talos-equation {
+    gap: 5px;
+    font-size: 11px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .talos-article *,
+  .talos-header * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+  .decay-line {
+    stroke-dashoffset: 0;
+  }
+}
