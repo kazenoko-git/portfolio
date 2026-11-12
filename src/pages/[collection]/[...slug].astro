@@ -192,18 +192,22 @@ const structuredData = {
         }
       });
       talosArticle.classList.add('talos-scroll-ready');
-      const revealObserver = new IntersectionObserver(
-        (entries, observer) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('is-visible');
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.12, rootMargin: '0px 0px -7% 0px' },
-      );
-      revealTargets.forEach((element) => revealObserver.observe(element));
+      if (CSS.supports('animation-timeline: view()')) {
+        talosArticle.classList.add('talos-scroll-native');
+      } else {
+        const revealObserver = new IntersectionObserver(
+          (entries, observer) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.12, rootMargin: '0px 0px -7% 0px' },
+        );
+        revealTargets.forEach((element) => revealObserver.observe(element));
+      }
     }
     document.querySelectorAll('article :is(h2,h3)[id]').forEach((heading) => {
       const anchor = document.createElement('a');

@@ -3311,12 +3311,31 @@ h3 {
   opacity: 1;
   transform: translateY(0);
 }
+.talos-scroll-native [data-scroll-reveal] {
+  animation: talos-scroll-travel linear both;
+  animation-timeline: view();
+  animation-range: entry 0% exit 100%;
+}
 .talos-scroll-ready .talos-figure.talos-decay .decay-line {
   stroke-dashoffset: 1200;
   animation: none;
 }
 .talos-scroll-ready .talos-figure.talos-decay.is-visible .decay-line {
   animation: chart-draw 1.4s ease-out forwards;
+}
+.talos-scroll-native .talos-figure.talos-decay .decay-line {
+  animation: talos-decay-travel linear both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 75%;
+}
+@keyframes talos-scroll-travel {
+  0% { opacity: 0; transform: translateY(56px) scale(0.98); }
+  14%, 82% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-48px) scale(0.985); }
+}
+@keyframes talos-decay-travel {
+  from { stroke-dashoffset: 1200; }
+  to { stroke-dashoffset: 0; }
 }
 @keyframes signal-flow {
   to { stroke-dashoffset: -34; }
