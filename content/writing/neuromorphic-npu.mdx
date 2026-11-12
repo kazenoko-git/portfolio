@@ -1,6 +1,6 @@
 ---
-title: A tiny chip, sixteen neurons, and some very big questions
-summary: "Meet Talos 1: a tiny, time-multiplexed spiking reservoir, a suspiciously enthusiastic benchmark suite, and what the evidence actually says."
+title: "Talos 1: sixteen neurons, one shared calculator"
+summary: "Inside a time-multiplexed spiking reservoir: how it works, what its simulations show, and where the benchmark claims stop."
 date: 2026-11-12
 tags: [Talos 1, Verilog, ASIC, Neuromorphic computing]
 status: Design report
@@ -8,8 +8,8 @@ draft: false
 featured: true
 featuredOrder: 1
 cover: /images/projects/chip.svg
-coverAlt: A little chip drawing for Talos 1, a sixteen-neuron spiking reservoir.
-coverCaption: Tiny chip. Sixteen neurons. An unreasonable number of questions.
+coverAlt: Hand-drawn illustration of the Talos 1 chip, with a simple signal trace on its display.
+coverCaption: Talos 1 is a sixteen-neuron hardware experiment in event-order memory.
 links:
   - label: Talos 1 source branch
     url: https://github.com/kazenoko-git/Talos/tree/talos_1
@@ -17,46 +17,26 @@ links:
     url: https://github.com/kazenoko-git/Talos/tree/talos_1/test
 ---
 
-<div class="talos-sticker" aria-label="A cartoon chip waves hello">
-  <svg viewBox="0 0 700 260" role="img" aria-labelledby="chip-title chip-desc">
-    <title id="chip-title">Talos says hello</title>
-    <desc id="chip-desc">A lavender cartoon chip with sixteen pins, a wiggly waveform, and a very small smile.</desc>
-    <path class="chip-arrow" d="M35 105 C95 43 156 44 204 88 M184 64 L207 89 L175 98" />
-    <text class="scribble" x="28" y="150">tiny chip!</text>
-    <g class="chip-body" transform="rotate(6 365 132)">
-      <path class="pins" d="M269 42v-27 M319 42V7 M369 42V12 M419 42V2 M469 42V13 M519 42V5 M569 42V16 M269 222v26 M319 222v32 M369 222v23 M419 222v31 M469 222v23 M519 222v30 M569 222v24 M249 63h-30 M249 103h-36 M249 143h-29 M249 183h-35 M591 63h34 M591 103h30 M591 143h38 M591 183h-30" />
-      <rect class="chip-shell" x="249" y="39" width="342" height="184" rx="22" />
-      <rect class="chip-screen" x="291" y="70" width="258" height="113" rx="9" />
-      <path class="chip-wave" d="M325 133l33-31 31 25 35-45 37 26" />
-      <path class="chip-eye" d="M324 95h20 M494 158h19" />
-      <circle class="chip-dot" cx="272" cy="197" r="6" />
-    </g>
-    <text class="scribble" x="505" y="240">big questions.</text>
-  </svg>
-</div>
+Talos 1 is a **16-neuron spiking reservoir** implemented in Verilog. It processes event streams using a fixed recurrent network and one shared arithmetic unit. The design began as a small neuromorphic hardware project: a way to learn what changes when a software idea has to fit into registers, clock cycles, wires, and a finite silicon budget.
 
-Hi! I’m **Talos 1**. I have sixteen tiny digital neurons, one shared arithmetic unit, a little SPI mailbox, and absolutely no idea what your cat is saying.
-
-I was built as a first neuromorphic hardware project: a small circuit that keeps a little memory of event order. The point was to learn what happens when a software idea gets translated into registers, clocks, wires, and a very finite silicon budget. The point was **not** to claim I can diagnose your heart, recognize every gesture, or understand the neighbor’s dog.
-
-This is a design report with the jargon translated into human. If you are ten, welcome. If you are a Verilog wizard, please enjoy my tiny hats.
+This report follows the signal from input to output, explains the neuron update rule, and examines what the test suite actually measured. The short version: the simulations show a working, stateful circuit and several toy readout tasks. They do not yet show a useful advantage over simple software, a physical speed or power result, or general skill at recognizing real-world signals. The technical terms are unpacked as we go.
 
 <nav class="talos-jump" aria-label="Quick jumps">
-  <a href="#fast-tour-what-did-i-actually-build">Fast tour</a><a href="#the-memory-trick-buckets-leaks-and-a-reset-button">The memory trick</a><a href="#what-the-tests-really-tested">Benchmark carnival</a><a href="#so-what-did-the-tiny-chip-teach-us">What we learned</a>
+  <a href="#fast-tour-what-did-i-actually-build">Architecture</a><a href="#the-memory-trick-buckets-leaks-and-a-reset-button">Neuron update</a><a href="#what-the-tests-really-tested">Benchmarks</a><a href="#what-did-the-chip-teach-us">What we learned</a>
 </nav>
 
 ## Fast tour: what did I actually build?
 
-Talos 1 is a **16-neuron, recurrent, leaky integrate-and-fire reservoir**. That sounds like a sentence assembled by a committee of robots. Here is the kid-friendly translation:
+Talos 1 is a **16-neuron, recurrent, leaky integrate-and-fire reservoir**. In plain language, it is a small network of number-storing units that react to incoming events and to earlier activity:
 
 - **16 neurons:** sixteen little number buckets, each keeping an 8-bit signed value from −128 to +127.
 - **Integrate:** a new input can add to the number in a bucket.
 - **Leak:** the number slowly shrinks, so yesterday’s excitement eventually gets forgotten.
-- **Fire:** when the number reaches a threshold, the neuron emits a one-bit spike and resets its bucket to zero.
+- **Fire:** when the number reaches a threshold, the neuron emits a one-bit spike and resets its stored value to zero.
 - **Recurrent:** neurons can react to spikes from the previous step. A ripple can make more ripples.
 - **Reservoir:** the circuit makes a changing pattern; a separate, ordinary computer can learn to read that pattern.
 
-Talos is not a tiny computer running a tiny copy of a brain. It is a deliberately small pattern-making circuit. It does not train itself. It does not contain the final task classifier. Its job is to turn an event stream into a state that a host computer may find easier to classify.
+Talos is not a miniature brain or a complete classifier. It is a deliberately small pattern-making circuit. It does not train itself or contain the final task classifier. Its job is to turn an event stream into a state that a host computer may find easier to classify.
 
 <figure class="talos-figure talos-flow">
   <svg viewBox="0 0 760 250" role="img" aria-labelledby="flow-title flow-desc">
@@ -98,7 +78,7 @@ Here is the little three-beat pattern used by the direction demo. The two classe
     <text class="raster-label" x="176" y="239">neuron 0</text><text class="raster-label" x="176" y="261">neuron 1</text><text class="raster-label" x="176" y="283">neuron 2</text>
     <g class="raster-dot"><circle cx="307" cy="107" r="12"/><circle cx="462" cy="143" r="12"/><circle cx="617" cy="179" r="12"/><circle cx="617" cy="235" r="12"/><circle cx="462" cy="257" r="12"/><circle cx="307" cy="279" r="12"/></g>
   </svg>
-  <figcaption>These are input spikes, not measured membrane voltages. In the actual benchmark, each sequence is repeated. The final input is different for the two directions, which makes this a useful end-to-end demo but a weak proof that the reservoir needed to remember the earlier order.</figcaption>
+  <figcaption>These are input spikes, not measured membrane voltages. In the benchmark, each sequence is repeated. The final input differs between directions, which makes this a useful end-to-end demo but weak evidence that the reservoir needed to remember the earlier order.</figcaption>
 </figure>
 
 ## The memory trick: buckets, leaks, and a reset button
@@ -109,7 +89,7 @@ Each neuron stores its membrane value, `V`. On a step, it computes:
   <span>new bucket</span><b>=</b><span>old bucket</span><b>−</b><span>leak</span><b>+</b><span>incoming nudges</span><span class="equation-foot">Clamp to −128…+127. If the result ≥ threshold: <strong>spike!</strong> Then reset to zero.</span>
 </div>
 
-The leak choices are arithmetic right shifts: no leak, shift by 3, by 2, or by 1. A shift is cheap hardware. It is also chunky integer math. For example, a value of 7 shifted right by 2 becomes 1, then 0 on a later step. Real exponential decay is smooth; these integer buckets descend by little stair-steps and may settle at a small residue.
+The leak choices are arithmetic right shifts: no leak, shift by 3, by 2, or by 1. A shift is cheap hardware, but it is chunky integer math. For example, a value of 7 shifted right by 2 becomes 1, then 0 on a later step. Real exponential decay is smooth; these integer values descend in steps and may settle at a small residue.
 
 <figure class="talos-figure talos-decay">
   <div class="chart-heading"><span>THE LITTLE BUCKET FORGETS</span><span>16 simulated steps · leak setting >>> 3</span></div>
@@ -124,18 +104,18 @@ The leak choices are arithmetic right shifts: no leak, shift by 3, by 2, or by 1
     <circle class="decay-point" cx="92" cy="68" r="6"/><circle class="decay-point" cx="532" cy="184" r="6"/><circle class="decay-point" cx="692" cy="184" r="6"/>
     <text class="chart-label" x="85" y="58">21</text><text class="chart-label" x="620" y="172">7: integer floor</text>
     <text class="chart-label" x="72" y="275">step 1</text><text class="chart-label" x="657" y="275">step 16</text>
-    <path class="chart-callout" d="M590 174l-19-20"/><text class="chart-label" x="488" y="141">The bucket says:</text><text class="chart-label" x="504" y="159">“I can’t divide 7</text><text class="chart-label" x="510" y="177">into smaller bits!”</text>
+    <path class="chart-callout" d="M590 174l-19-20"/><text class="chart-label" x="488" y="141">Integer floor:</text><text class="chart-label" x="504" y="159">right shifts keep</text><text class="chart-label" x="510" y="177">a residue of 7</text>
   </svg>
   <figcaption>Recorded impulse-decay values: 21, 19, 17, 15, 14, 13, 12, 11, 10, 9, 8, 7, 7, 7, 7, 7. The flat tail is a real fixed-point limitation, not secret long-term memory. The line is a simulation result, not a silicon measurement.</figcaption>
 </figure>
 
-If the value reaches the threshold, Talos emits a spike and resets that neuron to zero. A spike is a one-bit event, like a tiny “ding!” The membrane value is different: it is the bucket’s current fill level. Talos exposes both, because throwing away the bucket and keeping only the dings can lose useful information.
+If the value reaches the threshold, Talos emits a spike and resets that neuron to zero. A spike is a one-bit event, like a brief digital pulse. The membrane value is different: it records the neuron’s current internal state. Talos exposes both, because keeping only the spikes can discard useful information.
 
 ### One shared calculator, sixteen turns
 
 Here is the main area-saving trick: there are sixteen stored neuron values, but **only one LIF arithmetic unit**. A sequencer visits neuron 0, then 1, then 2 … then 15. One time-step therefore takes sixteen update cycles after it starts. It is a classroom calculator passed down a row: less hardware, more waiting.
 
-At the beginning of a step, Talos freezes the previous step’s spike vector. Every neuron uses that same old snapshot while the new step is calculated. Without the snapshot, neuron 15 might see freshly updated spikes from neurons 0–14 while neuron 0 saw only the previous step. That would make the answer depend on the order of the queue, which is a very silly kind of physics.
+At the beginning of a step, Talos freezes the previous step’s spike vector. Every neuron uses that same snapshot while the new step is calculated. Without it, neuron 15 might see freshly updated spikes from neurons 0–14 while neuron 0 saw only the previous step. The result would depend on update order, rather than on the circuit’s intended step-by-step model.
 
 While the update is running, `busy` is high and another step trigger is ignored. The host should wait until `busy` clears before starting another step or treating the output vector as a completed result. Spike bits are updated as the sequencer visits neurons; read the final result after the step is done.
 
@@ -153,7 +133,7 @@ The top-level design connects an SPI slave, a small register file, and the reser
 | `0x06` | Leak selector; reset default `>>> 2` | How quickly buckets forget |
 | `0x10–0x1F` | Sixteen signed membrane values | How full each bucket is |
 
-The step can also be triggered by a rising edge on the dedicated `ext_tick` pin. Seven spike outputs go to `uo[1]` through `uo[7]`, eight more to `uio[0]` through `uio[7]`, and neuron 15 has no dedicated spike pin: read it over SPI. Tiny pin budget, tiny plot twist.
+The step can also be triggered by a rising edge on the dedicated `ext_tick` pin. Seven spike outputs go to `uo[1]` through `uo[7]`, eight more to `uio[0]` through `uio[7]`, and neuron 15 has no dedicated spike pin: read it over SPI.
 
 `info.yaml` declares a 16 MHz clock and a 1×1 tile. That is the project configuration, **not** proof that the full design is physically safe at 16 MHz. A simulation clock is not a timing signoff report, and an ASIC layout is not the same thing as an FPGA board test.
 
@@ -179,10 +159,10 @@ The chart shows the headline values from the ten-demo suite. It is a deliberatel
     <div class="score-card score-mid"><b>2 → ~0</b><span>control error</span><small>seven encoded states; reset each action</small></div>
     <div class="score-card score-mid"><b>21 → 7</b><span>impulse decay</span><small>then integer residue stays put</small></div>
   </div>
-  <figcaption>These numbers are what the tests observed, with the test setup written directly underneath so the score does not sneak away wearing a fake mustache. The anomaly and direction scores are synthetic-pattern demonstrations, not clinical or general-purpose detection results.</figcaption>
+  <figcaption>Each card names the test setup beside its result. The anomaly and direction scores are synthetic-pattern demonstrations, not clinical or general-purpose detection results.</figcaption>
 </figure>
 
-### A fair reading of the carnival
+### A fair reading of the results
 
 The strongest useful story is not “Talos solved ten applications.” It is “the circuit produces state that changes with its inputs, and small readouts can fit several toy tasks.” The weak spots are just as educational:
 
@@ -205,12 +185,12 @@ The strongest useful story is not “Talos solved ten applications.” It is “
 
 The test script’s 60-trial forward/reverse classifier also splits repeated copies of the same two three-event sequences into training and test groups. It resets the network for each sequence. That is a handy wiring demonstration, but “unseen test trials” means new repetitions, not new sequence types. Also, the final channel already says forward or reverse. The best next test would give both classes the same final event and ask whether the earlier order still helps.
 
-## So, what did the tiny chip teach us?
+## What did the chip teach us?
 
-### Good lessons, in very small shoes
+### What the evidence supports
 
 1. **The state is useful to inspect.** Keeping sixteen membrane values made it easy to see the dynamics, including when the network stayed subthreshold. The state is part of the story, not just the fireworks.
-2. **Integer details matter.** Right shifts are cheap, but negative values round in a particular way and small positive values can stick. A cartoon “leak” is not enough; the exact arithmetic rule changes behavior.
+2. **Integer details matter.** Right shifts are cheap, but negative values round in a particular way and small positive values can stick. A high-level description of “leak” is not enough; the exact arithmetic rule changes behavior.
 3. **One calculator saves area and costs time.** Sharing the LIF unit avoids sixteen copies of the arithmetic, but every step takes sixteen visits. Area and throughput are having a very polite argument.
 4. **A demo can pass and still ask an easy question.** Repeated toy data checks that a path works. Held-out patterns, noise, simple baselines, and honest metrics check whether the result means more.
 5. **A simulation is not a chip measurement.** The 16-test rerun is simulation evidence. It tells us about the RTL under that environment, not power, physical maximum speed, or behavior on real hardware.
@@ -224,7 +204,7 @@ The test script’s 60-trial forward/reverse classifier also splits repeated cop
 - Report both success and failure, with number of examples and exactly what was held out.
 - Measure the actual critical path, area, and power from the relevant physical-design reports; test the SPI interface on a real board when one is available.
 
-That is how “this little thing passed a test” grows into “we know what this little thing can do.” Tiny steps. Extremely tiny neurons.
+That is how “the circuit passed a test” grows into “we know what this circuit can do”: stronger controls, harder examples, and measurements from the hardware itself.
 
 ## The honest postcard
 
@@ -232,9 +212,7 @@ Talos 1 is a small, fixed-topology, 16-neuron spiking reservoir in Verilog. It u
 
 It is a first hardware design and a good pile of questions. It is not evidence of medical accuracy, useful audio recognition, measured low power, 16 MHz physical operation, or working fabricated silicon. Talos 2 is a separate follow-on design; it is not the subject of this post.
 
-If you remember one thing, let it be this: **Talos does not know what a pattern means. It keeps a tiny changing memory, and lets a separate readout take a guess.**
-
-<div class="talos-goodbye"><span class="goodbye-chip" aria-hidden="true">▣</span><span>Thank you for visiting my extremely small pond.</span><span class="goodbye-ripple" aria-hidden="true">〰〰〰</span></div>
+The key distinction is simple: **Talos does not know what a pattern means. It keeps a changing internal state; a separate readout uses that state to make a prediction.**
 
 ### Sources and reproducibility
 
