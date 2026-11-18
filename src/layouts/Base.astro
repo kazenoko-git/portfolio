@@ -13,6 +13,7 @@ interface Props {
   cinematic?: boolean;
   structuredData?: Record<string, unknown>;
   article?: boolean;
+  theme?: 'talos';
 }
 const {
   title,
@@ -21,6 +22,7 @@ const {
   cinematic = false,
   structuredData,
   article = false,
+  theme,
 } = Astro.props;
 const pageTitle = title
   ? `${title} — kazenoko`
@@ -56,7 +58,7 @@ const linkedData = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#0b100f" />
+    <meta name="theme-color" content={theme === 'talos' ? '#f6f1e7' : '#0b100f'} />
     <title>{pageTitle}</title>
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
@@ -83,7 +85,7 @@ const linkedData = {
       href="/rss.xml"
     />
   </head>
-  <body class:list={{ cinematic }}>
+  <body class:list={{ cinematic, 'theme-talos': theme === 'talos' }}>
     <a class="skip-link" href="#main">
       Skip to content
     </a>

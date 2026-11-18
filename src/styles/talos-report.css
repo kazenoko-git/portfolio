@@ -1,0 +1,240 @@
+.article-opening {
+  display: contents;
+}
+
+body.theme-talos {
+  --talos-sheet: #f6f1e7;
+  --talos-text: #282333;
+  --talos-violet: #552d72;
+  --talos-mustard: #ecd18c;
+  --ink: var(--talos-text);
+  --muted: #5e5266;
+  --accent: var(--talos-violet);
+  --line: #cec2cc;
+  color-scheme: light;
+  background: var(--talos-sheet);
+}
+
+.theme-talos .site-header {
+  min-height: 0;
+  padding: 9px 14px;
+  background: var(--talos-sheet);
+  border-bottom: 1px solid var(--line);
+}
+
+.theme-talos .site-header nav a {
+  color: var(--talos-text);
+}
+
+.theme-talos .site-header nav a:is(:hover, [aria-current='page']) {
+  color: var(--talos-violet);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.theme-talos .article-top {
+  max-width: 1240px;
+  padding-block: 14px 16px;
+}
+
+.theme-talos .back-link {
+  color: var(--talos-violet);
+}
+
+.talos-opening {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  width: min(calc(100% - 48px), 1240px);
+  margin-inline: auto;
+  padding: clamp(20px, 4vw, 54px);
+  background: var(--talos-mustard);
+  border: 1px solid #35283d;
+  border-radius: 10px 28px 10px 28px;
+  box-shadow: 5px 6px 0 #35283d;
+}
+
+.talos-opening .talos-header {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.talos-opening .talos-header h1 {
+  color: var(--talos-text);
+  font-family: var(--display);
+  font-size: clamp(34px, 5.1vw, 74px);
+  line-height: 0.99;
+  text-wrap: balance;
+}
+
+.talos-opening .talos-header .eyebrow,
+.talos-opening .talos-header > p,
+.talos-opening .article-meta {
+  color: #3c2f41;
+}
+
+.talos-opening .article-meta {
+  border-top: 1px solid #8d7553;
+  padding-top: 14px;
+  gap: 6px 16px;
+}
+
+.talos-opening .talos-cover {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.talos-opening .project-image {
+  margin: 0;
+}
+
+.talos-opening .project-image-frame {
+  aspect-ratio: 9 / 5;
+  min-height: 0;
+  background: var(--talos-mustard);
+  box-shadow: none;
+  border: 0;
+}
+
+.talos-opening figcaption {
+  padding-inline: 10px;
+  color: #473751;
+  text-align: center;
+}
+
+.theme-talos .talos-reading-layout {
+  max-width: none;
+  width: 100%;
+  padding: 0;
+}
+
+.theme-talos .talos-reading-layout .talos-article {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.theme-talos .talos-lede {
+  max-width: 65ch;
+  margin: clamp(34px, 6vw, 80px) auto 20px;
+  padding-inline: 24px;
+  line-height: 1.62;
+  font-size: clamp(18px, 2vw, 23px);
+}
+
+.theme-talos .talos-lede p {
+  margin: 0;
+}
+
+.theme-talos .talos-jump {
+  max-width: 850px;
+  margin: 0 auto clamp(36px, 6vw, 70px);
+  padding-inline: 24px;
+  justify-content: center;
+}
+
+.theme-talos .talos-jump a {
+  background: #e8def0;
+  color: #371a4d;
+  border-color: #9778a7;
+  border-radius: 20px;
+  box-shadow: none;
+}
+
+.theme-talos .talos-jump a:is(:hover, :focus-visible) {
+  background: #502b68;
+  color: white;
+}
+
+.talos-chapter {
+  padding: clamp(30px, 5vw, 66px) max(24px, calc((100% - 1080px) / 2));
+  border-block-start: 1px solid #cbbdcb;
+}
+
+.talos-chapter-architecture {
+  background: #ece4f4;
+}
+.talos-chapter-theory {
+  background: #f6f1e7;
+}
+.talos-chapter-benchmarks {
+  background: #e2eee9;
+}
+.talos-chapter-lessons {
+  background: #eee7dc;
+}
+
+.theme-talos .talos-chapter > :is(p, h2, h3, ul, ol, pre) {
+  width: min(100%, 69ch);
+  margin-inline: auto;
+}
+
+.theme-talos .talos-chapter > h2 {
+  margin: 0 auto 22px;
+  font-family: var(--display);
+  font-size: clamp(28px, 4vw, 48px);
+  line-height: 1.12;
+  border: 0;
+  padding: 0;
+  scroll-margin-top: 76px;
+}
+
+.theme-talos .talos-chapter > h2:not(:first-child) {
+  margin-top: 44px;
+}
+
+.theme-talos .talos-architecture {
+  grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr);
+  gap: clamp(24px, 5vw, 70px);
+}
+
+.theme-talos .talos-architecture .talos-architecture-diagram {
+  top: 72px;
+  background: #f7f0fc;
+  box-shadow: 4px 4px 0 #b7a5c7;
+}
+
+.theme-talos .talos-chapter > :is(.talos-figure, .talos-equation) {
+  margin-inline: auto;
+  max-width: 880px;
+}
+
+.theme-talos .talos-article > :is(section:not(.talos-chapter), .article-end) {
+  width: min(calc(100% - 48px), 850px);
+  margin-inline: auto;
+}
+
+@media (max-width: 700px) {
+  .talos-opening {
+    grid-template-columns: minmax(0, 1fr);
+    width: calc(100% - 32px);
+    gap: 20px;
+  }
+
+  .talos-opening .talos-cover {
+    max-width: 470px;
+    justify-self: center;
+  }
+
+  .theme-talos .talos-architecture {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .theme-talos .talos-architecture .talos-architecture-diagram {
+    top: 60px;
+  }
+}
+
+@media (max-height: 470px) {
+  .theme-talos .talos-architecture .talos-architecture-diagram {
+    position: static;
+  }
+}

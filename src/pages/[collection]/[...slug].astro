@@ -5,6 +5,7 @@ import { readingTime } from '../../lib/content';
 import { entryDate, entryVisual } from '../../lib/presentation';
 import ProjectImage from '../../components/ProjectImage.astro';
 import { site } from '../../lib/site';
+import '../../styles/talos-report.css';
 export async function getStaticPaths() {
   const collections = [
     'writing',
@@ -23,6 +24,8 @@ export async function getStaticPaths() {
   }));
 }
 const { entry } = Astro.props;
+const talosReport =
+  entry.collection === 'writing' && entry.id === 'neuromorphic-npu';
 const { Content, headings } = await render(entry);
 const draft = 'draft' in entry.data && entry.data.draft;
 const repoUrl = 'repoUrl' in entry.data ? entry.data.repoUrl : undefined;
@@ -77,56 +80,58 @@ const structuredData = {
   noindex={draft}
   structuredData={structuredData}
   article
+  theme={talosReport ? 'talos' : undefined}
 >
   <div class="wrap article-top">
     <a href={`/${entry.collection}`} class="mono back-link">
       ← All {entry.collection}
     </a>
   </div>
-  <header
-    class:list={[
-      'wrap article-header',
-      { 'talos-header': entry.id === 'neuromorphic-npu' },
-    ]}
-  >
-    <p class="eyebrow">{entry.data.tags.join(' / ')}</p>
-    <h1>{entry.data.title}</h1>
-    <p>{entry.data.summary}</p>
-    <div class="article-meta mono">
-      <span>
-        {entry.collection === 'projects' && entry.data.projectPeriod
-          ? 'Project period · '
-          : ''}
-        {entryDate(entry)}
-      </span>
-      <span>{readingTime(entry.body)} min read</span>
-      <span>{entry.data.status}</span>
-      {repoUrl && <a href={repoUrl}>Project repository ↗</a>}
-    </div>
-    {draft && (
-      <div class="draft-notice">
-        <strong>Unpublished draft outline</strong>
+  <div class:list={['article-opening', { 'talos-opening': talosReport }]}>
+    <header
+      class:list={[
+        'wrap article-header',
+        { 'talos-header': entry.id === 'neuromorphic-npu' },
+      ]}
+    >
+      <p class="eyebrow">{entry.data.tags.join(' / ')}</p>
+      <h1>{entry.data.title}</h1>
+      <p>{entry.data.summary}</p>
+      <div class="article-meta mono">
         <span>
-          Technical content is awaiting verified source material. This page is
-          excluded from RSS and search indexing.
+          {entry.collection === 'projects' && entry.data.projectPeriod
+            ? 'Project period · '
+            : ''}
+          {entryDate(entry)}
         </span>
+        <span>{readingTime(entry.body)} min read</span>
+        <span>{entry.data.status}</span>
+        {repoUrl && <a href={repoUrl}>Project repository ↗</a>}
       </div>
-    )}
-  </header>
-  <div
-    class:list={[
-      'wrap article-art',
-      { 'talos-cover': entry.id === 'neuromorphic-npu' },
-    ]}
-  >
-    <ProjectImage entry={entry} hero />
+      {draft && (
+        <div class="draft-notice">
+          <strong>Unpublished draft outline</strong>
+          <span>
+            Technical content is awaiting verified source material. This page is
+            excluded from RSS and search indexing.
+          </span>
+        </div>
+      )}
+    </header>
+    <div
+      class:list={[
+        'wrap article-art',
+        { 'talos-cover': entry.id === 'neuromorphic-npu' },
+      ]}
+    >
+      <ProjectImage entry={entry} hero />
+    </div>
   </div>
   <div
     class:list={[
       'wrap article-grid',
       {
-        'talos-reading-layout':
-          entry.collection === 'writing' && entry.id === 'neuromorphic-npu',
+        'talos-reading-layout': talosReport,
       },
     ]}
   >
