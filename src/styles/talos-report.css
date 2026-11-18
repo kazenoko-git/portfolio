@@ -238,3 +238,12 @@ body.theme-talos {
     position: static;
   }
 }
+
+.talos-legacy-anchor {
+  display: block;
+  scroll-margin-top: 76px;
+}
+
+.theme-talos .talos-chapter > .talos-legacy-anchor + h2 {
+  margin-top: 0;
+}

@@ -1,6 +1,6 @@
 ---
 title: "Talos 1: sixteen neurons, one shared calculator"
-summary: "Inside a time-multiplexed spiking reservoir: how it works, what its simulations show, and which tasks need better tests."
+summary: "A Verilog reservoir design, with a walkthrough of the signal path and results from ten benchmark demos."
 date: 2026-11-12
 tags: [Talos 1, Verilog, ASIC, Neuromorphic computing]
 status: Design report
@@ -9,7 +9,7 @@ featured: true
 featuredOrder: 1
 cover: /images/projects/chip.svg
 coverAlt: Hand-drawn illustration of the Talos 1 chip, with a simple signal trace on its display.
-coverCaption: Talos 1 is a sixteen-neuron hardware experiment in event-order memory.
+coverCaption: Talos 1 cover illustration.
 links:
   - label: Talos 1 source branch
     url: https://github.com/kazenoko-git/Talos/tree/talos_1
@@ -21,17 +21,19 @@ import TalosScrollStory from '../../src/components/TalosScrollStory.astro';
 
 <div class="talos-lede">
 
-Can a circuit with sixteen neurons remember which event came first? Talos 1 is a **spiking reservoir in Verilog** built to explore that question. Sixteen neurons hold the state, and they take turns using one shared calculator. The simulations show how that state changes. The harder question is whether it helps a computer tell similar event sequences apart.
+I built Talos 1 in Verilog to study how the state of a spiking circuit changes as events arrive.
 
 </div>
 
 <nav class="talos-jump" aria-label="Quick jumps">
-  <a href="#fast-tour-what-did-i-actually-build">Architecture</a><a href="#the-memory-trick-buckets-leaks-and-a-reset-button">Neuron update</a><a href="#what-the-tests-really-tested">Benchmarks</a><a href="#what-did-the-chip-teach-us">What we learned</a>
+  <a href="#signal-path">Architecture</a><a href="#the-neuron-update-rule">Neuron update</a><a href="#benchmark-results-and-limitations">Benchmarks</a><a href="#a-persistent-residue-in-the-membrane-state">Membrane residue</a>
 </nav>
 
 <section class="talos-chapter talos-chapter-architecture">
 
-## Fast tour: what did I actually build?
+<a id="fast-tour-what-did-i-actually-build" class="talos-legacy-anchor"></a>
+
+## Signal path
 
 <TalosScrollStory />
 
@@ -57,7 +59,9 @@ The direction demo sends the same three input events in opposite orders.
 
 <section class="talos-chapter talos-chapter-theory">
 
-## The memory trick: buckets, leaks, and a reset button
+<a id="the-memory-trick-buckets-leaks-and-a-reset-button" class="talos-legacy-anchor"></a>
+
+## The neuron update rule
 
 Each neuron stores a membrane value, `V`. Think of it as a bucket: incoming current can fill it, the leak drains it, and reaching the threshold makes the neuron fire and empty the bucket. The hardware updates the stored value once per step.
 
@@ -65,7 +69,7 @@ Each neuron stores a membrane value, `V`. Think of it as a bucket: incoming curr
   <span>new value</span><b>=</b><span>old value</span><b>−</b><span>leak</span><b>+</b><span>incoming current</span><span class="equation-foot">Clamp to −128…+127. At or above threshold, emit a spike and reset to zero.</span>
 </div>
 
-With leak enabled, the circuit subtracts `V >>> k` on each update, where `k` is 1, 2, or 3. The arithmetic right shift uses integer math. In the decay test below, the value stops at 7 because `7 >>> 3` evaluates to 0.
+With leak enabled, the circuit subtracts `V >>> k` on each update, where `k` is 1, 2, or 3. The shift operates on signed integers.
 
 <figure class="talos-figure talos-decay">
   <div class="chart-heading"><span>IMPULSE RESPONSE</span><span>16 simulated steps · leak setting >>> 3</span></div>
@@ -109,11 +113,11 @@ The step can also be triggered by a rising edge on the dedicated `ext_tick` pin.
 
 <section class="talos-chapter talos-chapter-benchmarks">
 
-## What the tests really tested
+<a id="what-the-tests-really-tested" class="talos-legacy-anchor"></a>
+
+## Benchmark results and limitations
 
 The cocotb testbench drives the Verilog top module through its pins and SPI registers in Icarus Verilog. On **22 October 2026**, revision [`9985bf6`](https://github.com/kazenoko-git/Talos/tree/9985bf6) passed **16 tests**: ten benchmark demos, five functional tests, and one direction classifier. The results come from RTL simulation, with Python readouts running on the host where needed. Timing and power on fabricated silicon remain unmeasured.
-
-The scorecard includes accuracy, R², cosine similarity, and error. Each metric applies to its own task.
 
 <figure class="talos-figure talos-scorecard">
   <div class="chart-heading"><span>BENCHMARK SCORECARD</span><span>Ten demos</span></div>
@@ -123,50 +127,44 @@ The scorecard includes accuracy, R², cosine similarity, and error. Each metric 
     <div class="score-card score-bad"><b>60% → 40%</b><span>denoising accuracy</span><small>input vs. reconstruction</small></div>
     <div class="score-card score-good"><b>100%</b><span>anomaly demo</span><small>same two pattern families</small></div>
     <div class="score-card score-good"><b>100%</b><span>sensor fusion</span><small>four fixed input combinations</small></div>
-    <div class="score-card score-warn"><b>100%</b><span>direction demo</span><small>last input identifies the class</small></div>
-    <div class="score-card score-warn"><b>95%</b><span>phase labels</span><small>input directly marks the phase</small></div>
+    <div class="score-card score-warn"><b>100%</b><span>direction demo</span><small>two opposite sweeps</small></div>
+    <div class="score-card score-warn"><b>95%</b><span>phase labels</span><small>quiet vs. burst</small></div>
     <div class="score-card score-good"><b>1.000 / 0.000</b><span>selected motif cosine</span><small>identical repeats vs one pair</small></div>
-    <div class="score-card score-mid"><b>2 → ~0</b><span>control error</span><small>seven encoded states; reset each action</small></div>
+    <div class="score-card score-mid"><b>2 → ~0</b><span>control error</span><small>seven encoded states</small></div>
     <div class="score-card score-mid"><b>21 → 7</b><span>impulse decay</span><small>stable integer residue</small></div>
   </div>
 </figure>
 
-### What each test measures
-
-| Demo | Result | Limits of the setup |
-| --- | --- | --- |
-| Regression | Tuned settings reached R² = 0.945 on a repeated waveform, using subthreshold membrane values. | General regression skill on new signals. The comment called the input rate coding, but it is a quantized binary channel pattern. |
-| Forecasting | One-step R² = 0.563 and MSE = 0.0361 on one repeated period-10 sawtooth. | A general memory limit or strong multi-step forecasting. A persistence baseline should be checked. |
-| Denoising | Accuracy against the clean signal fell from 60% for the noisy input to 40% for the reconstruction. | The assertion checks output length only. |
-| Anomaly detection | 100% on repeated `1010` versus `1100` patterns. | Unseen anomaly families, jitter, or a measured false-alarm rate. The “unseen” wording in the old log is too generous. |
-| Sensor fusion | 100% on four repeated Boolean input combinations at one fixed delay. | A learned coincidence window across changing delays, missing events, and timing noise. |
-| Direction / localization | 100% on two opposite sweeps. | Proof that temporal memory was needed: the final input channel alone identifies which sweep just happened. |
-| Temporal segmentation | 95% for quiet versus burst phases. | A difficult segmentation task: the current input directly announces the label. |
-| Embeddings | Repeated identical inputs had cosine similarity 1.000; two selected motifs had 0.000. | Robust embeddings across jitter, noise, many classes, or held-out examples. |
-| Control | Simulated error fell from 2 to about 0. | Learned temporal control: the reservoir is reset before each action, and a simple proportional controller is the obvious baseline. |
-| Impulse decay | The state faded from 21 to a stable total residue of 7. | Autonomous spiking or a useful oscillation. The seeded state stays subthreshold. |
-
-**Cosine similarity** compares the direction of two vectors. Identical repeats scored 1.000, and one selected pair of patterns scored 0.000. The test covers repeatability and separation for that pair.
+| Demo | Setup and interpretation |
+| --- | --- |
+| Regression | The readout fits a repeated waveform encoded as a quantized pattern across input channels. Evaluation on new waveforms remains open. |
+| Forecasting | One step ahead on a sawtooth with a period of 10 steps. Mean squared error was 0.0361. |
+| Denoising | Both accuracies use the clean signal as the reference. The test assertion checks output length only. |
+| Anomaly detection | The train and test sets both use repetitions of `1010` and `1100`. |
+| Sensor fusion | The delay stays fixed, so the experiment leaves the range of delays the readout can handle unknown. |
+| Direction / localization | A separate 60-trial classifier also splits repeats of the same two sequences and resets the reservoir before each one. In both tests the final input channel gives the class away. |
+| Temporal segmentation | The current input directly identifies whether the signal is in a quiet phase or a burst. |
+| Embeddings | Cosine similarity compares the direction of two vectors. Here, the test checks repeatability and separation for one selected pair of patterns. |
+| Control | The test resets the reservoir before each action, clearing any state from earlier actions. |
+| Impulse decay | The starting membrane value stays below the firing threshold throughout the test. |
 
 **R²** compares the model’s squared prediction error with the error from predicting the average every time. A score of 1 is perfect. A score of 0 means the errors are equal. A negative score means the model has higher error.
-
-The 60-trial direction test splits repetitions of two three-event sequences into training and test sets and resets the reservoir before each sequence. The final input channel identifies the class by itself.
 
 </section>
 
 <section class="talos-chapter talos-chapter-lessons">
 
-## What did the chip teach us?
+<a id="what-did-the-chip-teach-us" class="talos-legacy-anchor"></a>
 
-The impulse test exposed a property of the integer update rule: small positive values can keep their state after input stops. Reading the membrane registers made that behavior visible even when no neuron fired.
+## A persistent residue in the membrane state
+
+In the impulse test, the membrane value stopped decreasing at 7. With the leak set to shift by three bits, `7 >>> 3` is zero, so subsequent steps subtract nothing. The membrane registers expose this residue even though the spike output stays silent.
 
 ### What I would test next
 
 - Use sequences with the same first and last events and swap the middle events. Compare the readout with an event count baseline.
-- Hold out entire pattern shapes, not merely more copies of a pattern the readout has already seen.
-- Add jitter, missing events, distractors, and multiple random seeds.
+- Hold out entire sequence patterns. For each held-out pattern, record the number of trials and how many the classifier gets right with clean timing, jitter, and dropped events.
 - Compare forecasting with persistence, which predicts the last observed value, and compare denoising with a simple temporal filter.
-- Report both success and failure, with number of examples and exactly what was held out.
 - Measure the actual critical path, area, and power from the relevant physical-design reports; test the SPI interface on a real board when one is available.
 
 <a id="the-honest-postcard"></a>

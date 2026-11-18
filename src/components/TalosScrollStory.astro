@@ -206,9 +206,9 @@ const neurons = Array.from({ length: 16 }, (_, i) => ({
     <section data-architecture-step="1">
       <h3>2. Store the neuron state</h3>
       <p>
-        Each of the <strong>sixteen neurons</strong> stores a signed 8-bit
-        membrane value, from −128 to +127. A step applies the leak and adds
-        incoming current. At threshold, the neuron emits a one-bit
+        Each neuron stores a signed 8-bit membrane value, from −128 to +127. A
+        step applies the leak and adds incoming current. At threshold, the
+        neuron emits a one-bit
         <strong>spike</strong> and resets its stored value to zero. This update
         rule is called leaky integrate-and-fire, or LIF.
       </p>
@@ -243,11 +243,8 @@ const neurons = Array.from({ length: 16 }, (_, i) => ({
     <section data-architecture-step="4">
       <h3>5. Read the state on the host</h3>
       <p>
-        The host reads both the spike bits and the membrane values. A neuron can
-        have a useful membrane value even on a step when it did not fire. A
-        separate software <strong>readout</strong> can use these values to make
-        a prediction. The reservoir supplies the state, and the host trains and
-        runs the readout.
+        The host reads the spike bits and membrane values over SPI. It can train
+        a software <strong>readout</strong> to use that state for predictions.
       </p>
     </section>
   </div>
