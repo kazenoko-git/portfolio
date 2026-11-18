@@ -44,7 +44,7 @@ test('published Talos report is indexable and included in syndication', async ()
     'utf8',
   );
   assert.doesNotMatch(report, /name="robots" content="noindex, nofollow"/);
-  assert.match(report, /Talos 1: sixteen neurons, one shared calculator/);
+  assert.match(report, /Talos 1: An attempt at neuromorphic chips/);
   for (const file of ['rss.xml', 'sitemap.xml'])
     assert.ok((await readFile(join(root, file), 'utf8')).includes('/writing/neuromorphic-npu'));
 });
