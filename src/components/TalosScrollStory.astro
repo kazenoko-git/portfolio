@@ -198,80 +198,56 @@ const neurons = Array.from({ length: 16 }, (_, i) => ({
     <section data-architecture-step="0">
       <h3>1. Send an event</h3>
       <p>
-        A host computer or microcontroller sends{' '}
-        <strong>eight input bits over SPI</strong>, a simple serial connection.
-        Each bit can directly nudge one of neurons 0–7. It is a tiny doorbell
-        panel: the bits say which bells rang, without saying what the pattern
-        means.
+        The host writes <strong>eight input bits over SPI</strong>, a serial
+        connection. Each set bit adds input current to its corresponding neuron,
+        from 0 through 7.
       </p>
     </section>
     <section data-architecture-step="1">
-      <h3>2. Keep sixteen little memories</h3>
+      <h3>2. Store the neuron state</h3>
       <p>
-        Each of the <strong>sixteen neurons</strong> stores an 8-bit signed
-        number, from −128 to +127. Incoming events add to it; a leak subtracts a
-        little. If the result reaches a threshold, the neuron emits a one-bit{' '}
-        <strong>spike</strong> and resets to zero. That is “leaky
-        integrate-and-fire,” or LIF. A number bucket with a leak and an overflow
-        bell.
-      </p>
-      <p>
-        The stored number is the <strong>membrane value</strong>. The spike is a
-        separate yes-or-no event. Talos exposes both: a bucket can contain
-        useful information even when its bell has stayed quiet.
+        Each of the <strong>sixteen neurons</strong> stores a signed 8-bit
+        membrane value, from −128 to +127. A step applies the leak and adds
+        incoming current. At threshold, the neuron emits a one-bit
+        <strong>spike</strong> and resets its stored value to zero. This update
+        rule is called leaky integrate-and-fire, or LIF.
       </p>
     </section>
     <section data-architecture-step="2">
-      <h3>3. Let yesterday nudge today</h3>
+      <h3>3. Feed back the previous spikes</h3>
       <p>
-        The network is <strong>recurrent</strong>: spikes from the previous step
-        feed back into the next update. Its fixed, ring-like wiring includes
-        excitatory and inhibitory connections and a connection five positions
-        away. Connection signs are −1, 0, or +1, scaled by a shared setting. Add
-        or subtract; no general-purpose multiplier required.
+        The network is <strong>recurrent</strong>. Spikes from the previous step
+        contribute to the next update through a fixed pattern of local
+        connections and a connection five positions away. Connection signs are
+        −1, 0, or +1. The circuit adds or subtracts a shared weight.
       </p>
       <p>
-        At the start of each step, the circuit{' '}
-        <strong>freezes the previous spike vector</strong>. Every neuron reads
-        that same snapshot. Otherwise a neuron updated later could peek at this
-        step’s new spikes. That would make the answer depend on who got their
-        turn first.
-      </p>
-      <p>
-        You can adjust the common weight, threshold, leak, and input bits. The
-        wiring itself is fixed in the Verilog; SPI cannot redraw it.
+        At the start of each step, Talos{' '}
+        <strong>snapshots all sixteen spike bits</strong>. Every neuron reads
+        that same snapshot, so newly generated spikes affect the following step.
       </p>
     </section>
     <section data-architecture-step="3">
       <h3>4. Pass the calculator</h3>
       <p>
-        Sixteen stored values; <strong>one shared LIF arithmetic unit</strong>.
-        A sequencer visits neurons 0, 1, 2 … 15. One time-step takes sixteen
-        update cycles after it starts. Think of a calculator passed down a row:
-        less hardware, more waiting. The orange outline follows those turns as
-        you scroll.
+        A sequencer sends neurons 0 through 15 through
+        <strong>one shared LIF arithmetic unit</strong>. It works like passing
+        one calculator down a row. Sharing the unit saves hardware and takes
+        sixteen update cycles per step.
       </p>
       <p>
-        During the update, <code>busy</code> is high and another step trigger is
-        ignored. The host waits until it clears before reading a completed
-        result. The spike bits change during the scan, so reading halfway
-        through would mix unfinished work with finished work.
+        Talos ignores new triggers while <code>busy</code> is high. The host
+        waits for it to clear before reading the completed spike vector.
       </p>
     </section>
     <section data-architecture-step="4">
-      <h3>5. Read the pattern outside the chip</h3>
+      <h3>5. Read the state on the host</h3>
       <p>
-        The host reads the final spikes and membrane values. A separate software{' '}
-        <strong>readout</strong> can learn to turn that changing state into a
-        prediction. The chip makes the pattern; the host interprets it. Drummer,
-        then song recognizer.
-      </p>
-      <p>
-        This is why the circuit is called a <strong>reservoir</strong>. It
-        supplies a changing internal state rather than a complete trained
-        classifier. It does not train itself or know what a gesture means. The
-        benchmark results later in this post evaluate simulations and host-side
-        readouts.
+        The host reads both the spike bits and the membrane values. A neuron can
+        have a useful membrane value even on a step when it did not fire. A
+        separate software <strong>readout</strong> can use these values to make
+        a prediction. The reservoir supplies the state, and the host trains and
+        runs the readout.
       </p>
     </section>
   </div>
